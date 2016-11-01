@@ -1,3 +1,5 @@
+https://travis-ci.org/leeyazhou/nfs-rpc.svg?branch=master
+
 nfs-rpc
 =======
 
