@@ -3,13 +3,10 @@
 *.classpath
 *.project
 /nfs-rpc-mina/.settings
-/nfs-rpc-mina2/*
 /nfs-rpc-mina2/*.classpath
 /nfs-rpc-mina2/*.project
-/nfs-rpc-netty/*
 /nfs-rpc-netty/*.classpath
 /nfs-rpc-netty/*.project
-/nfs-rpc-netty4/*
 /nfs-rpc-netty4/*.classpath
 /nfs-rpc-netty4/*.project
 /target/
