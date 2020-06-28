@@ -7,7 +7,7 @@ package com.bytesgo.nfs.rpc.mina.protocol;
  */
 import org.apache.mina.common.ByteBuffer;
 
-import com.bytesgo.nfs.rpc.common.protocol.ByteBufferWrapper;
+import com.bytesgo.nfs.rpc.core.protocol.ByteBufferWrapper;
 
 /**
  * Implements ByteBufferWrapper based on ByteBuffer

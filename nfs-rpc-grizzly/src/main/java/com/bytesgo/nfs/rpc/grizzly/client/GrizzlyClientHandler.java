@@ -12,8 +12,8 @@ import org.glassfish.grizzly.filterchain.BaseFilter;
 import org.glassfish.grizzly.filterchain.FilterChainContext;
 import org.glassfish.grizzly.filterchain.NextAction;
 
-import com.bytesgo.nfs.rpc.common.ResponseWrapper;
-import com.bytesgo.nfs.rpc.common.client.Client;
+import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.core.client.Client;
 
 /**
  * Grizzly Client Handler

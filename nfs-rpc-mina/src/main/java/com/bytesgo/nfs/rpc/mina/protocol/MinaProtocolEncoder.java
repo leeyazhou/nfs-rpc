@@ -9,7 +9,7 @@ import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoderAdapter;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 
-import com.bytesgo.nfs.rpc.common.protocol.ProtocolUtils;
+import com.bytesgo.nfs.rpc.core.protocol.ProtocolUtils;
 
 /**
  * Encode message

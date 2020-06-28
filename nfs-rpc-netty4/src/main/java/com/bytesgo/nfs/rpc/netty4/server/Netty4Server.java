@@ -7,8 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.common.ProtocolFactory;
-import com.bytesgo.nfs.rpc.common.server.Server;
+import com.bytesgo.nfs.rpc.core.ProtocolFactory;
+import com.bytesgo.nfs.rpc.core.server.Server;
 import com.bytesgo.nfs.rpc.netty4.protocol.Netty4ProtocolDecoder;
 import com.bytesgo.nfs.rpc.netty4.protocol.Netty4ProtocolEncoder;
 

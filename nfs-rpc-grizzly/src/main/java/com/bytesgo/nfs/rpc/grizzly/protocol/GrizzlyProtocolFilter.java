@@ -16,7 +16,7 @@ import org.glassfish.grizzly.filterchain.NextAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.common.protocol.ProtocolUtils;
+import com.bytesgo.nfs.rpc.core.protocol.ProtocolUtils;
 
 /**
  * Grizzly Protocol Decoder

@@ -6,17 +6,19 @@
         <artifactId>parent</artifactId>
         <version>5.1</version>
     </parent>
+    <groupId>com.bytesgo.nfs.rpc</groupId>
     <artifactId>nfs-rpc-parent</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <inceptionYear>2012</inceptionYear>
     <modules>
-        <module>nfs-rpc-common</module>
+        <module>nfs-rpc-core</module>
         <module>nfs-rpc-grizzly</module>
         <module>nfs-rpc-mina</module>
         <module>nfs-rpc-mina2</module>
         <module>nfs-rpc-netty</module>
         <module>nfs-rpc-netty4</module>
+        <module>nfs-rpc-benchmark</module>
     </modules>
     <properties>
         <hessian.version>4.0.38</hessian.version>

@@ -2,7 +2,7 @@ package com.bytesgo.nfs.rpc.netty4.protocol;
 
 import java.util.List;
 
-import com.bytesgo.nfs.rpc.common.protocol.ProtocolUtils;
+import com.bytesgo.nfs.rpc.core.protocol.ProtocolUtils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

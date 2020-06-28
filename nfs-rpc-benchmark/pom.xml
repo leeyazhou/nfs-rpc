@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.bytesgo.nfs.rpc</groupId>
+        <artifactId>nfs-rpc-parent</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>nfs-rpc-benchmark</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.bytesgo.nfs.rpc</groupId>
+            <artifactId>nfs-rpc-grizzly</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bytesgo.nfs.rpc</groupId>
+            <artifactId>nfs-rpc-mina</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bytesgo.nfs.rpc</groupId>
+            <artifactId>nfs-rpc-mina2</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bytesgo.nfs.rpc</groupId>
+            <artifactId>nfs-rpc-netty</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bytesgo.nfs.rpc</groupId>
+            <artifactId>nfs-rpc-netty4</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+    </dependencies>
+</project>

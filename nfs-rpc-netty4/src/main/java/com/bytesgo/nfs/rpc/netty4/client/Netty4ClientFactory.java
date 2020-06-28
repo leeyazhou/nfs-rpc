@@ -3,8 +3,8 @@ package com.bytesgo.nfs.rpc.netty4.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.common.client.AbstractClientFactory;
-import com.bytesgo.nfs.rpc.common.client.Client;
+import com.bytesgo.nfs.rpc.core.client.AbstractClientFactory;
+import com.bytesgo.nfs.rpc.core.client.Client;
 import com.bytesgo.nfs.rpc.netty4.protocol.Netty4ProtocolDecoder;
 import com.bytesgo.nfs.rpc.netty4.protocol.Netty4ProtocolEncoder;
 

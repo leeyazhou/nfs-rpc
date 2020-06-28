@@ -18,8 +18,8 @@ import org.glassfish.grizzly.threadpool.ThreadPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.common.ProtocolFactory;
-import com.bytesgo.nfs.rpc.common.server.Server;
+import com.bytesgo.nfs.rpc.core.ProtocolFactory;
+import com.bytesgo.nfs.rpc.core.server.Server;
 import com.bytesgo.nfs.rpc.grizzly.protocol.GrizzlyProtocolFilter;
 
 /**

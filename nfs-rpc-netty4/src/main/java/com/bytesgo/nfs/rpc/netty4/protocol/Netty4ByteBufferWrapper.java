@@ -1,6 +1,6 @@
 package com.bytesgo.nfs.rpc.netty4.protocol;
 
-import com.bytesgo.nfs.rpc.common.protocol.ByteBufferWrapper;
+import com.bytesgo.nfs.rpc.core.protocol.ByteBufferWrapper;
 
 /**
  * nfs-rpc Apache License

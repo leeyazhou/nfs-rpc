@@ -5,11 +5,11 @@ import java.net.InetSocketAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.common.RequestWrapper;
-import com.bytesgo.nfs.rpc.common.ResponseWrapper;
-import com.bytesgo.nfs.rpc.common.client.AbstractClient;
-import com.bytesgo.nfs.rpc.common.client.Client;
-import com.bytesgo.nfs.rpc.common.client.ClientFactory;
+import com.bytesgo.nfs.rpc.core.RequestWrapper;
+import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.core.client.AbstractClient;
+import com.bytesgo.nfs.rpc.core.client.Client;
+import com.bytesgo.nfs.rpc.core.client.ClientFactory;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;

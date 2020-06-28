@@ -9,8 +9,8 @@ import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
 
-import com.bytesgo.nfs.rpc.common.client.AbstractClientInvocationHandler;
-import com.bytesgo.nfs.rpc.common.client.ClientFactory;
+import com.bytesgo.nfs.rpc.core.client.AbstractClientInvocationHandler;
+import com.bytesgo.nfs.rpc.core.client.ClientFactory;
 
 /**
  * Mina Client Invocation Handler for proxy

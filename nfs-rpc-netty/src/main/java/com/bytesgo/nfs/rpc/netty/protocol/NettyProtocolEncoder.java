@@ -9,7 +9,7 @@ import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
 
-import com.bytesgo.nfs.rpc.common.protocol.ProtocolUtils;
+import com.bytesgo.nfs.rpc.core.protocol.ProtocolUtils;
 
 /**
  * Encode Message

@@ -15,8 +15,8 @@ import org.apache.mina.transport.socket.nio.NioSocketConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.common.client.AbstractClientFactory;
-import com.bytesgo.nfs.rpc.common.client.Client;
+import com.bytesgo.nfs.rpc.core.client.AbstractClientFactory;
+import com.bytesgo.nfs.rpc.core.client.Client;
 import com.bytesgo.nfs.rpc.mina2.protocol.MinaProtocolCodecFilter;
 
 /**
