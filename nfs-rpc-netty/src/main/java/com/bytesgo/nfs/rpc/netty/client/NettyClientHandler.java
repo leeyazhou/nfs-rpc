@@ -16,7 +16,7 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.common.ResponseWrapper;
 
 /**
  * Netty Client Handler

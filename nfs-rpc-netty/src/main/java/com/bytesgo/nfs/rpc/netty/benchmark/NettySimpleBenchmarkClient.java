@@ -1,7 +1,7 @@
 package com.bytesgo.nfs.rpc.netty.benchmark;
 
-import com.bytesgo.nfs.rpc.core.benchmark.AbstractSimpleProcessorBenchmarkClient;
-import com.bytesgo.nfs.rpc.core.client.ClientFactory;
+import com.bytesgo.nfs.rpc.common.benchmark.AbstractSimpleProcessorBenchmarkClient;
+import com.bytesgo.nfs.rpc.common.client.ClientFactory;
 import com.bytesgo.nfs.rpc.netty.client.NettyClientFactory;
 
 /**

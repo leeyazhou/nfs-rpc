@@ -5,9 +5,9 @@ import java.util.List;
 import org.glassfish.grizzly.threadpool.GrizzlyExecutorService;
 import org.glassfish.grizzly.threadpool.ThreadPoolConfig;
 
-import com.bytesgo.nfs.rpc.core.benchmark.AbstractSimpleProcessorBenchmarkClient;
-import com.bytesgo.nfs.rpc.core.benchmark.ClientRunnable;
-import com.bytesgo.nfs.rpc.core.client.ClientFactory;
+import com.bytesgo.nfs.rpc.common.benchmark.AbstractSimpleProcessorBenchmarkClient;
+import com.bytesgo.nfs.rpc.common.benchmark.ClientRunnable;
+import com.bytesgo.nfs.rpc.common.client.ClientFactory;
 import com.bytesgo.nfs.rpc.grizzly.client.GrizzlyClientFactory;
 
 /**

@@ -10,7 +10,7 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 
-import com.bytesgo.nfs.rpc.core.protocol.ProtocolUtils;
+import com.bytesgo.nfs.rpc.common.protocol.ProtocolUtils;
 
 /**
  * decode receive message

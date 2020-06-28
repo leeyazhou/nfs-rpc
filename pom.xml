@@ -7,7 +7,7 @@
         <version>5.1</version>
     </parent>
     <artifactId>nfs-rpc-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <inceptionYear>2012</inceptionYear>
     <modules>
@@ -23,7 +23,6 @@
         <jdk.version>1.6</jdk.version>
         <junit.version>4.12</junit.version>
         <kryo.version>4.0.0</kryo.version>
-        <log4j.version>1.2.17</log4j.version>
         <netty3.version>3.2.10.Final</netty3.version>
         <netty4.version>4.1.50.Final</netty4.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -51,11 +50,6 @@
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
                 <version>${netty4.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${log4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.netty</groupId>

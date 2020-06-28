@@ -1,7 +1,7 @@
 package com.bytesgo.nfs.rpc.mina2.benchmark;
 
-import com.bytesgo.nfs.rpc.core.benchmark.AbstractSimpleProcessorBenchmarkClient;
-import com.bytesgo.nfs.rpc.core.client.ClientFactory;
+import com.bytesgo.nfs.rpc.common.benchmark.AbstractSimpleProcessorBenchmarkClient;
+import com.bytesgo.nfs.rpc.common.client.ClientFactory;
 import com.bytesgo.nfs.rpc.mina2.client.MinaClientFactory;
 
 /**

@@ -8,9 +8,9 @@ package com.bytesgo.nfs.rpc.grizzly.client;
 import org.glassfish.grizzly.CompletionHandler;
 import org.glassfish.grizzly.Connection;
 
-import com.bytesgo.nfs.rpc.core.RequestWrapper;
-import com.bytesgo.nfs.rpc.core.client.AbstractClient;
-import com.bytesgo.nfs.rpc.core.client.ClientFactory;
+import com.bytesgo.nfs.rpc.common.RequestWrapper;
+import com.bytesgo.nfs.rpc.common.client.AbstractClient;
+import com.bytesgo.nfs.rpc.common.client.ClientFactory;
 
 /**
  * Grizzly Client

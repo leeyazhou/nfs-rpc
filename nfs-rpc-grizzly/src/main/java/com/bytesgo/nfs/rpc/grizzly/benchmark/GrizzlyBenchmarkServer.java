@@ -1,7 +1,7 @@
 package com.bytesgo.nfs.rpc.grizzly.benchmark;
 
-import com.bytesgo.nfs.rpc.core.benchmark.AbstractBenchmarkServer;
-import com.bytesgo.nfs.rpc.core.server.Server;
+import com.bytesgo.nfs.rpc.common.benchmark.AbstractBenchmarkServer;
+import com.bytesgo.nfs.rpc.common.server.Server;
 import com.bytesgo.nfs.rpc.grizzly.server.GrizzlyServer;
 
 /**

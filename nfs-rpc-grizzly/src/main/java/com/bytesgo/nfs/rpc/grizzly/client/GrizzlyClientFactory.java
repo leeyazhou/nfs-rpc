@@ -15,9 +15,9 @@ import org.glassfish.grizzly.nio.transport.TCPNIOTransport;
 import org.glassfish.grizzly.nio.transport.TCPNIOTransportBuilder;
 import org.glassfish.grizzly.strategies.SameThreadIOStrategy;
 
-import com.bytesgo.nfs.rpc.core.client.AbstractClientFactory;
-import com.bytesgo.nfs.rpc.core.client.Client;
-import com.bytesgo.nfs.rpc.core.client.ClientFactory;
+import com.bytesgo.nfs.rpc.common.client.AbstractClientFactory;
+import com.bytesgo.nfs.rpc.common.client.Client;
+import com.bytesgo.nfs.rpc.common.client.ClientFactory;
 import com.bytesgo.nfs.rpc.grizzly.protocol.GrizzlyProtocolFilter;
 
 /**

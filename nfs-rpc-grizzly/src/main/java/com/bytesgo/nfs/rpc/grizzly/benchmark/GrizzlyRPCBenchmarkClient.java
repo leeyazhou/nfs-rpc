@@ -10,8 +10,8 @@ import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
 
-import com.bytesgo.nfs.rpc.core.benchmark.AbstractRPCBenchmarkClient;
-import com.bytesgo.nfs.rpc.core.benchmark.BenchmarkTestService;
+import com.bytesgo.nfs.rpc.common.benchmark.AbstractRPCBenchmarkClient;
+import com.bytesgo.nfs.rpc.common.benchmark.BenchmarkTestService;
 import com.bytesgo.nfs.rpc.grizzly.client.GrizzlyClientInvocationHandler;
 
 /**

@@ -1,8 +1,8 @@
 package com.bytesgo.nfs.rpc.netty4.benchmark;
 
-import com.bytesgo.nfs.rpc.core.Codecs;
-import com.bytesgo.nfs.rpc.core.benchmark.AbstractSimpleProcessorBenchmarkClient;
-import com.bytesgo.nfs.rpc.core.client.ClientFactory;
+import com.bytesgo.nfs.rpc.common.Codecs;
+import com.bytesgo.nfs.rpc.common.benchmark.AbstractSimpleProcessorBenchmarkClient;
+import com.bytesgo.nfs.rpc.common.client.ClientFactory;
 import com.bytesgo.nfs.rpc.netty4.client.Netty4ClientFactory;
 
 /**

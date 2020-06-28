@@ -9,7 +9,7 @@ import org.glassfish.grizzly.Buffer;
 import org.glassfish.grizzly.filterchain.FilterChainContext;
 import org.glassfish.grizzly.memory.Buffers;
 
-import com.bytesgo.nfs.rpc.core.protocol.ByteBufferWrapper;
+import com.bytesgo.nfs.rpc.common.protocol.ByteBufferWrapper;
 
 /**
  * Grizzly ByteBuffer Wrapper

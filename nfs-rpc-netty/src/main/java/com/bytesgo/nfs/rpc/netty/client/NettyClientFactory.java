@@ -15,9 +15,9 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.NamedThreadFactory;
-import com.bytesgo.nfs.rpc.core.client.AbstractClientFactory;
-import com.bytesgo.nfs.rpc.core.client.Client;
+import com.bytesgo.nfs.rpc.common.NamedThreadFactory;
+import com.bytesgo.nfs.rpc.common.client.AbstractClientFactory;
+import com.bytesgo.nfs.rpc.common.client.Client;
 
 /**
  * Netty Client Factory,to create client based on netty API

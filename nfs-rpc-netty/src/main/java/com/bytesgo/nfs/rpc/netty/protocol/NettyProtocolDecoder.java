@@ -17,7 +17,7 @@ import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
 
-import com.bytesgo.nfs.rpc.core.protocol.ProtocolUtils;
+import com.bytesgo.nfs.rpc.common.protocol.ProtocolUtils;
 
 /**
  * decode byte[] change to pipeline receive requests or responses,let's IO thread do less thing

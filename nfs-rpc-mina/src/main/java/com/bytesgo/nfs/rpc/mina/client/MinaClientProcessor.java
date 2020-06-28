@@ -13,7 +13,7 @@ import org.apache.mina.common.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.common.ResponseWrapper;
 
 /**
  * Mina Client processor for receive message,handle exception
