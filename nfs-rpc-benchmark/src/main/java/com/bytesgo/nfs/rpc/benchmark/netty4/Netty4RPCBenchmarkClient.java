@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bytesgo.nfs.rpc.benchmark.AbstractRPCBenchmarkClient;
-import com.bytesgo.nfs.rpc.benchmark.BenchmarkTestService;
+import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkTestService;
 import com.bytesgo.nfs.rpc.core.Codecs;
 import com.bytesgo.nfs.rpc.netty4.client.Netty4ClientInvocationHandler;
 

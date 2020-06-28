@@ -3,7 +3,9 @@
  * 
  * http://code.google.com/p/nfs-rpc (c) 2011
  */
-package com.bytesgo.nfs.rpc.benchmark;
+package com.bytesgo.nfs.rpc.benchmark.service;
+
+import com.bytesgo.nfs.rpc.benchmark.PB;
 
 /**
  * Just for Reflection RPC Benchmark

@@ -9,13 +9,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.bytesgo.nfs.rpc.benchmark.AbstractBenchmarkServer;
-import com.bytesgo.nfs.rpc.benchmark.BenchmarkTestServiceImpl;
 import com.bytesgo.nfs.rpc.benchmark.PB;
-import com.bytesgo.nfs.rpc.benchmark.PBBenchmarkTestServiceImpl;
 import com.bytesgo.nfs.rpc.benchmark.RequestObject;
 import com.bytesgo.nfs.rpc.benchmark.RequestObjectSerializer;
 import com.bytesgo.nfs.rpc.benchmark.ResponseObject;
 import com.bytesgo.nfs.rpc.benchmark.ResponseObjectSerializer;
+import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkTestServiceImpl;
+import com.bytesgo.nfs.rpc.benchmark.service.PBBenchmarkTestServiceImpl;
 import com.bytesgo.nfs.rpc.core.protocol.RPCProtocol;
 import com.bytesgo.nfs.rpc.core.protocol.SimpleProcessorProtocol;
 import com.bytesgo.nfs.rpc.core.protocol.codec.KryoUtils;

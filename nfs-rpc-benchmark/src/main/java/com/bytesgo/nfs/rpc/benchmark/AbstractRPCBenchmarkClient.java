@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 
+import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkTestService;
 import com.bytesgo.nfs.rpc.core.Codecs;
 import com.bytesgo.nfs.rpc.core.protocol.RPCProtocol;
 

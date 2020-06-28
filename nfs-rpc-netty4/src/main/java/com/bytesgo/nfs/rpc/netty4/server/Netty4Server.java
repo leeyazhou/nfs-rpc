@@ -66,7 +66,7 @@ public class Netty4Server implements Server {
           }
         });
     b.bind(new InetSocketAddress("127.0.0.1", listenPort)).sync();
-    LOGGER.warn("Server started,listen at: " + listenPort + ", businessThreads is " + businessThreads);
+    LOGGER.info("Server started,listen at: " + listenPort + ", businessThreads is " + businessThreads);
   }
 
   public void registerProcessor(int protocolType, String serviceName, Object serviceInstance) {

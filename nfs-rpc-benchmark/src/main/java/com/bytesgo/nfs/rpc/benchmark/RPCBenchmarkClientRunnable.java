@@ -13,6 +13,7 @@ import java.util.concurrent.CyclicBarrier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkTestService;
 import com.bytesgo.nfs.rpc.core.Codecs;
 import com.google.protobuf.ByteString;
 

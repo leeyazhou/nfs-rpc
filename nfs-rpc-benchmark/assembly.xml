@@ -37,12 +37,13 @@
     </moduleSets>
     <fileSets>
         <fileSet>
-            <directory>nfs-script</directory>
+            <directory>src/nfs-script</directory>
             <includes>
                 <include>client/*.sh</include>
                 <include>server/*.sh</include>
             </includes>
             <outputDirectory>bin</outputDirectory>
+            <fileMode>744</fileMode>
         </fileSet>
     </fileSets>
 </assembly>
