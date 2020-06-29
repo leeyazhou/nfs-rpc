@@ -3,12 +3,12 @@
  * 
  * http://code.google.com/p/nfs-rpc (c) 2011
  */
-package com.bytesgo.nfs.rpc.core.codec.protobuf;
+package com.bytesgo.nfs.rpc.codec.protobuf;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.bytesgo.nfs.rpc.core.codec.CodecException;
-import com.bytesgo.nfs.rpc.core.codec.Decoder;
+import com.bytesgo.nfs.rpc.codec.CodecException;
+import com.bytesgo.nfs.rpc.codec.Decoder;
 import com.google.protobuf.Message;
 
 /**

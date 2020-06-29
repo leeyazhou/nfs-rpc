@@ -12,7 +12,7 @@ import java.util.Map;
 
 import com.bytesgo.nfs.rpc.benchmark.AbstractRPCBenchmarkClient;
 import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkService;
-import com.bytesgo.nfs.rpc.core.codec.Codecs;
+import com.bytesgo.nfs.rpc.codec.Codecs;
 import com.bytesgo.nfs.rpc.netty4.client.Netty4ClientInvocationHandler;
 
 /**

@@ -19,9 +19,9 @@ import java.util.concurrent.CyclicBarrier;
 
 import com.bytesgo.nfs.rpc.benchmark.service.object.RequestObject;
 import com.bytesgo.nfs.rpc.benchmark.service.object.ResponseObject;
-import com.bytesgo.nfs.rpc.core.codec.Codecs;
-import com.bytesgo.nfs.rpc.core.codec.kryo.KryoUtils;
-import com.bytesgo.nfs.rpc.core.codec.protobuf.ProtobufDecoder;
+import com.bytesgo.nfs.rpc.codec.Codecs;
+import com.bytesgo.nfs.rpc.codec.kryo.KryoUtils;
+import com.bytesgo.nfs.rpc.codec.protobuf.ProtobufDecoder;
 import com.esotericsoftware.kryo.serializers.DefaultArraySerializers;
 
 /**

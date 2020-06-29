@@ -1,12 +1,12 @@
 /**
  * 
  */
-package com.bytesgo.nfs.rpc.core.codec.hessian;
+package com.bytesgo.nfs.rpc.codec.hessian;
 
-import com.bytesgo.nfs.rpc.core.codec.Codec;
-import com.bytesgo.nfs.rpc.core.codec.CodecException;
-import com.bytesgo.nfs.rpc.core.codec.Decoder;
-import com.bytesgo.nfs.rpc.core.codec.Encoder;
+import com.bytesgo.nfs.rpc.codec.Codec;
+import com.bytesgo.nfs.rpc.codec.CodecException;
+import com.bytesgo.nfs.rpc.codec.Decoder;
+import com.bytesgo.nfs.rpc.codec.Encoder;
 
 /**
  * @author leeyazhou

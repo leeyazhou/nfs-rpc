@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.core.codec.hessian;
+package com.bytesgo.nfs.rpc.codec.hessian;
 
 /**
  * nfs-rpc Apache License
@@ -11,8 +11,8 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.codec.CodecException;
-import com.bytesgo.nfs.rpc.core.codec.Decoder;
+import com.bytesgo.nfs.rpc.codec.CodecException;
+import com.bytesgo.nfs.rpc.codec.Decoder;
 import com.caucho.hessian.io.Hessian2Input;
 
 /**

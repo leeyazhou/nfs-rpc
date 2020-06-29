@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkService;
 import com.bytesgo.nfs.rpc.benchmark.service.object.RequestObject;
 import com.bytesgo.nfs.rpc.benchmark.service.object.ResponseObject;
-import com.bytesgo.nfs.rpc.core.codec.Codecs;
+import com.bytesgo.nfs.rpc.codec.Codecs;
 import com.google.protobuf.ByteString;
 
 /**

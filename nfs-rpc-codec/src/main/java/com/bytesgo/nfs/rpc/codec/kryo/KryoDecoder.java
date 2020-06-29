@@ -1,7 +1,7 @@
-package com.bytesgo.nfs.rpc.core.codec.kryo;
+package com.bytesgo.nfs.rpc.codec.kryo;
 
-import com.bytesgo.nfs.rpc.core.codec.CodecException;
-import com.bytesgo.nfs.rpc.core.codec.Decoder;
+import com.bytesgo.nfs.rpc.codec.CodecException;
+import com.bytesgo.nfs.rpc.codec.Decoder;
 import com.esotericsoftware.kryo.io.Input;
 
 /**

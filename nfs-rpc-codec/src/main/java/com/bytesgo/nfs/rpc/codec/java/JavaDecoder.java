@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.core.codec.java;
+package com.bytesgo.nfs.rpc.codec.java;
 
 /**
  * nfs-rpc Apache License
@@ -8,8 +8,8 @@ package com.bytesgo.nfs.rpc.core.codec.java;
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 
-import com.bytesgo.nfs.rpc.core.codec.CodecException;
-import com.bytesgo.nfs.rpc.core.codec.Decoder;
+import com.bytesgo.nfs.rpc.codec.CodecException;
+import com.bytesgo.nfs.rpc.codec.Decoder;
 
 /**
  * Java Decoder

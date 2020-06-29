@@ -1,15 +1,13 @@
 /**
  * 
  */
-package com.bytesgo.nfs.rpc.core.codec;
-
-import com.bytesgo.nfs.rpc.core.NFSException;
+package com.bytesgo.nfs.rpc.codec;
 
 /**
  * @author leeyazhou
  *
  */
-public class CodecException extends NFSException {
+public class CodecException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

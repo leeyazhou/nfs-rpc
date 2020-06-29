@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.bytesgo.nfs.rpc.core.codec;
+package com.bytesgo.nfs.rpc.codec;
 
 /**
  * @author leeyazhou

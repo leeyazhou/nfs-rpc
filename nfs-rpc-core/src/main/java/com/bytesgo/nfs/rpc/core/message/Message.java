@@ -6,7 +6,7 @@ package com.bytesgo.nfs.rpc.core.message;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.bytesgo.nfs.rpc.core.codec.Codecs;
+import com.bytesgo.nfs.rpc.codec.Codecs;
 
 /**
  * @author leeyazhou

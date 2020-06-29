@@ -3,7 +3,7 @@
  * 
  * http://code.google.com/p/nfs-rpc (c) 2011
  */
-package com.bytesgo.nfs.rpc.core.codec;
+package com.bytesgo.nfs.rpc.codec;
 
 /**
  * Decoder Interface

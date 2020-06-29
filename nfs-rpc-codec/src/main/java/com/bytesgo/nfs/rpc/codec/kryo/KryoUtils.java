@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.core.codec.kryo;
+package com.bytesgo.nfs.rpc.codec.kryo;
 
 import java.util.ArrayList;
 import java.util.List;

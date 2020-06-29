@@ -19,6 +19,7 @@
         <module>nfs-rpc-netty</module>
         <module>nfs-rpc-netty4</module>
         <module>nfs-rpc-benchmark</module>
+        <module>nfs-rpc-codec</module>
     </modules>
     <properties>
         <hessian.version>4.0.38</hessian.version>

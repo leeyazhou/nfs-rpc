@@ -14,7 +14,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 
 import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkService;
-import com.bytesgo.nfs.rpc.core.codec.Codecs;
+import com.bytesgo.nfs.rpc.codec.Codecs;
 import com.bytesgo.nfs.rpc.core.protocol.RPCProtocol;
 
 /**

@@ -11,8 +11,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bytesgo.nfs.rpc.codec.Codecs;
 import com.bytesgo.nfs.rpc.core.NFSException;
-import com.bytesgo.nfs.rpc.core.codec.Codecs;
 import com.bytesgo.nfs.rpc.core.message.RequestMessage;
 import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
@@ -74,7 +74,7 @@ public class RPCProtocol implements Protocol {
         Object[] requestObjects = request.getArgs();
         if (requestObjects != null) {
           for (Object requestArg : requestObjects) {
-            byte[] requestArgByte = Codecs.getEncoder(request.getCodecType()).encode(requestArg);
+            byte[] requestArgByte = Codecs.getCodec(request.getCodecType()).encode(requestArg);
             requestArgs.add(requestArgByte);
             requestArgsLen += requestArgByte.length;
           }
@@ -126,11 +126,11 @@ public class RPCProtocol implements Protocol {
         // no return object
         if (response.getResponse() != null) {
           className = response.getResponse().getClass().getName().getBytes();
-          body = Codecs.getEncoder(response.getCodecType()).encode(response.getResponse());
+          body = Codecs.getCodec(response.getCodecType()).encode(response.getResponse());
         }
         if (response.isError()) {
           className = response.getException().getClass().getName().getBytes();
-          body = Codecs.getEncoder(response.getCodecType()).encode(response.getException());
+          body = Codecs.getCodec(response.getCodecType()).encode(response.getException());
         }
         id = response.getId();
       } catch (Exception e) {
@@ -138,7 +138,7 @@ public class RPCProtocol implements Protocol {
         // still create responsewrapper,so client can get exception
         response.setResponse(new Exception("serialize response object error", e));
         className = Exception.class.getName().getBytes();
-        body = Codecs.getEncoder(response.getCodecType()).encode(response.getResponse());
+        body = Codecs.getCodec(response.getCodecType()).encode(response.getResponse());
       }
       type = RESPONSE;
       int capacity = ProtocolUtils.HEADER_LEN + RESPONSE_HEADER_LEN + body.length + className.length;

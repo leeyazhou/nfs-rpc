@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.codec.Codecs;
+import com.bytesgo.nfs.rpc.codec.Codecs;
 import com.bytesgo.nfs.rpc.core.message.RequestMessage;
 import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
@@ -32,7 +32,7 @@ public class SimpleProcessorServerHandler implements ServerHandler {
       if (request.getArgTypes() != null && request.getArgTypes()[0] != null) {
         argType = new String(request.getArgTypes()[0]);
       }
-      Object requestObject = Codecs.getDecoder(request.getCodecType()).decode(argType, (byte[]) request.getMessage());
+      Object requestObject = Codecs.getCodec(request.getCodecType()).decode(argType, (byte[]) request.getMessage());
       responseWrapper.setResponse(processors.get(requestObject.getClass().getName()).handle(requestObject));
     } catch (Exception e) {
       LOGGER.error("server direct call handler to handle request error", e);

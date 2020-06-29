@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.core.codec.hessian;
+package com.bytesgo.nfs.rpc.codec.java;
 
 /**
  * nfs-rpc Apache License
@@ -6,23 +6,24 @@ package com.bytesgo.nfs.rpc.core.codec.hessian;
  * http://code.google.com/p/nfs-rpc (c) 2011
  */
 import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 
-import com.bytesgo.nfs.rpc.core.codec.CodecException;
-import com.bytesgo.nfs.rpc.core.codec.Encoder;
-import com.caucho.hessian.io.Hessian2Output;
+import com.bytesgo.nfs.rpc.codec.CodecException;
+import com.bytesgo.nfs.rpc.codec.Encoder;
 
 /**
- * Hessian Encoder,use Hessian2
+ * Java Encoder
  * 
  * @author <a href="mailto:bluedavy@gmail.com">bluedavy</a>
  */
-public class HessianEncoder implements Encoder {
+public class JavaEncoder implements Encoder {
 
 	public byte[] encode(Object object) throws CodecException {
 		try {
 			ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-			Hessian2Output output = new Hessian2Output(byteArray);
+			ObjectOutputStream output = new ObjectOutputStream(byteArray);
 			output.writeObject(object);
+			output.flush();
 			output.close();
 			return byteArray.toByteArray();
 		} catch (Exception e) {

@@ -3,7 +3,7 @@ package com.bytesgo.nfs.rpc.core.protocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.codec.Codecs;
+import com.bytesgo.nfs.rpc.codec.Codecs;
 import com.bytesgo.nfs.rpc.core.message.RequestMessage;
 import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
@@ -45,7 +45,7 @@ public class SimpleProcessorProtocol implements Protocol {
 			try {
 				RequestMessage wrapper = (RequestMessage) message;
 				codecType = wrapper.getCodecType();
-				body = Codecs.getEncoder(codecType).encode(wrapper.getMessage());
+				body = Codecs.getCodec(codecType).encode(wrapper.getMessage());
 				id = wrapper.getId();
 				timeout = wrapper.getTimeout();
 				if (codecType == Codecs.PB_CODEC)
@@ -58,7 +58,7 @@ public class SimpleProcessorProtocol implements Protocol {
 			ResponseMessage wrapper = (ResponseMessage) message;
 			try {
 				codecType = wrapper.getCodecType();
-				body = Codecs.getEncoder(codecType).encode(wrapper.getResponse());
+				body = Codecs.getCodec(codecType).encode(wrapper.getResponse());
 				id = wrapper.getId();
 				if (codecType == Codecs.PB_CODEC)
 					className = wrapper.getResponse().getClass().getName().getBytes();
@@ -68,7 +68,7 @@ public class SimpleProcessorProtocol implements Protocol {
 				wrapper.setResponse(new Exception("encode response object error", e));
 				if (codecType == Codecs.PB_CODEC)
 					className = Exception.class.getName().getBytes();
-				body = Codecs.getEncoder(wrapper.getCodecType()).encode(wrapper.getResponse());
+				body = Codecs.getCodec(wrapper.getCodecType()).encode(wrapper.getResponse());
 			}
 			type = RESPONSE;
 		}

@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.codec.Codecs;
+import com.bytesgo.nfs.rpc.codec.Codecs;
 import com.bytesgo.nfs.rpc.core.message.RequestMessage;
 import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
@@ -124,7 +124,7 @@ public abstract class AbstractClient implements Client {
 				if (((byte[]) responseWrapper.getResponse()).length == 0) {
 					responseWrapper.setResponse(null);
 				} else {
-					Object responseObject = Codecs.getDecoder(responseWrapper.getCodecType()).decode(responseClassName,
+					Object responseObject = Codecs.getCodec(responseWrapper.getCodecType()).decode(responseClassName,
 							(byte[]) responseWrapper.getResponse());
 					if (responseObject instanceof Throwable) {
 						responseWrapper.setException((Throwable) responseObject);

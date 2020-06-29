@@ -12,7 +12,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.codec.Codecs;
+import com.bytesgo.nfs.rpc.codec.Codecs;
 import com.bytesgo.nfs.rpc.core.message.RequestMessage;
 import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
@@ -80,7 +80,7 @@ public class RPCServerHandler implements ServerHandler {
         Object[] tmprequestObjects = request.getArgs();
         for (int i = 0; i < tmprequestObjects.length; i++) {
           try {
-            requestObjects[i] = Codecs.getDecoder(request.getCodecType()).decode(argTypes[i], (byte[]) tmprequestObjects[i]);
+            requestObjects[i] = Codecs.getCodec(request.getCodecType()).decode(argTypes[i], (byte[]) tmprequestObjects[i]);
           } catch (Exception e) {
             throw new Exception("decode request object args error", e);
           }
