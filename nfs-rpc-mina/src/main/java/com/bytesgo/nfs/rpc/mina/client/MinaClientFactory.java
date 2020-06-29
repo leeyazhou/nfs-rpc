@@ -18,9 +18,9 @@ import org.apache.mina.transport.socket.nio.SocketConnectorConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.NamedThreadFactory;
 import com.bytesgo.nfs.rpc.core.client.AbstractClientFactory;
 import com.bytesgo.nfs.rpc.core.client.Client;
+import com.bytesgo.nfs.rpc.core.util.concurrent.NamedThreadFactory;
 import com.bytesgo.nfs.rpc.mina.protocol.MinaProtocolCodecFilter;
 
 /**

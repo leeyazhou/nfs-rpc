@@ -12,8 +12,8 @@ import org.glassfish.grizzly.filterchain.BaseFilter;
 import org.glassfish.grizzly.filterchain.FilterChainContext;
 import org.glassfish.grizzly.filterchain.NextAction;
 
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
 import com.bytesgo.nfs.rpc.core.client.Client;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
 /**
  * Grizzly Client Handler
@@ -36,10 +36,10 @@ public class GrizzlyClientHandler extends BaseFilter {
     try {
       if (message instanceof List) {
         @SuppressWarnings("unchecked")
-        List<ResponseWrapper> responses = (List<ResponseWrapper>) message;
+        List<ResponseMessage> responses = (List<ResponseMessage>) message;
         client.putResponses(responses);
-      } else if (message instanceof ResponseWrapper) {
-        ResponseWrapper response = (ResponseWrapper) message;
+      } else if (message instanceof ResponseMessage) {
+        ResponseMessage response = (ResponseMessage) message;
         client.putResponse(response);
       } else {
         error = new IllegalStateException("receive message error,only support List || ResponseWrapper");

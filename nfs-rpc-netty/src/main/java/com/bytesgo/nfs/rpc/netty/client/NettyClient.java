@@ -12,11 +12,11 @@ import org.jboss.netty.channel.ChannelFutureListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.RequestWrapper;
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
 import com.bytesgo.nfs.rpc.core.client.AbstractClient;
 import com.bytesgo.nfs.rpc.core.client.Client;
 import com.bytesgo.nfs.rpc.core.client.ClientFactory;
+import com.bytesgo.nfs.rpc.core.message.RequestMessage;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
 /**
  * Netty Client
@@ -39,7 +39,7 @@ public class NettyClient extends AbstractClient {
     this.connectTimeout = connectTimeout;
   }
 
-  public void sendRequest(final RequestWrapper wrapper, final int timeout) throws Exception {
+  public void sendRequest(final RequestMessage wrapper, final int timeout) throws Exception {
     final long beginTime = System.currentTimeMillis();
     final Client self = this;
     ChannelFuture writeFuture = cf.getChannel().write(wrapper);
@@ -68,7 +68,7 @@ public class NettyClient extends AbstractClient {
           errorMsg = "Send request to " + cf.getChannel().toString() + " error" + future.getCause();
         }
         LOGGER.error(errorMsg);
-        ResponseWrapper response = new ResponseWrapper(wrapper.getId(), wrapper.getCodecType(), wrapper.getProtocolType());
+        ResponseMessage response = new ResponseMessage(wrapper.getId(), wrapper.getCodecType(), wrapper.getProtocolType());
         response.setException(new Exception(errorMsg));
         self.putResponse(response);
       }

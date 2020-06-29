@@ -19,7 +19,7 @@ public interface Protocol {
 	 * @param byteBuffer
 	 * @throws Exception
 	 */
-	ByteBufferWrapper encode(Object message, ByteBufferWrapper bytebufferWrapper) throws Exception;
+	ByteBufferWrapper encode(Object message, ByteBufferWrapper bytebufferWrapper) throws ProtocolException;
 
 	/**
 	 * decode stream to object
@@ -29,6 +29,6 @@ public interface Protocol {
 	 * @return Object
 	 * @throws Exception
 	 */
-	Object decode(ByteBufferWrapper wrapper, Object errorObject, int... originPos) throws Exception;
+	Object decode(ByteBufferWrapper wrapper, Object errorObject, int... originPos) throws ProtocolException;
 
 }

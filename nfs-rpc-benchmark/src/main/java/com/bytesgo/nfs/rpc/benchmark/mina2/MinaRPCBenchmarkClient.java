@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bytesgo.nfs.rpc.benchmark.AbstractRPCBenchmarkClient;
-import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkTestService;
+import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkService;
 import com.bytesgo.nfs.rpc.mina2.client.MinaClientInvocationHandler;
 
 /**
@@ -25,10 +25,10 @@ public class MinaRPCBenchmarkClient extends AbstractRPCBenchmarkClient {
     new MinaRPCBenchmarkClient().run(args);
   }
 
-  public BenchmarkTestService getProxyInstance(List<InetSocketAddress> servers, int clientNums, int connectTimeout,
+  public BenchmarkService getProxyInstance(List<InetSocketAddress> servers, int clientNums, int connectTimeout,
       String targetInstanceName, Map<String, Integer> methodTimeouts, int codectype, Integer protocolType) {
-    return (BenchmarkTestService) Proxy.newProxyInstance(MinaRPCBenchmarkClient.class.getClassLoader(),
-        new Class<?>[] { BenchmarkTestService.class },
+    return (BenchmarkService) Proxy.newProxyInstance(MinaRPCBenchmarkClient.class.getClassLoader(),
+        new Class<?>[] { BenchmarkService.class },
         new MinaClientInvocationHandler(servers, clientNums, connectTimeout, targetInstanceName, methodTimeouts, codectype, protocolType));
   }
 

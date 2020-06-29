@@ -14,11 +14,11 @@ import com.google.protobuf.ByteString;
  * 
  * @author <a href="mailto:bluedavy@gmail.com">bluedavy</a>
  */
-public class PBBenchmarkTestServiceImpl implements BenchmarkTestService {
+public class BenchmarkPBServiceImpl implements BenchmarkService {
 
   private int responseSize;
 
-  public PBBenchmarkTestServiceImpl(int responseSize) {
+  public BenchmarkPBServiceImpl(int responseSize) {
     this.responseSize = responseSize;
   }
 

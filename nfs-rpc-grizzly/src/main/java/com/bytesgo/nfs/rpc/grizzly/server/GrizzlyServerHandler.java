@@ -20,9 +20,9 @@ import org.glassfish.grizzly.filterchain.NextAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.ProtocolFactory;
-import com.bytesgo.nfs.rpc.core.RequestWrapper;
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.core.message.RequestMessage;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
+import com.bytesgo.nfs.rpc.core.protocol.ProtocolFactory;
 
 /**
  * Grizzly Server Handler
@@ -49,12 +49,12 @@ public class GrizzlyServerHandler extends BaseFilter {
       LOGGER.error("server threadpool full,threadpool maxsize is:" + ((ThreadPoolExecutor) threadPool).getMaximumPoolSize());
       if (message instanceof List) {
         @SuppressWarnings("unchecked")
-        List<RequestWrapper> requests = (List<RequestWrapper>) message;
-        for (final RequestWrapper request : requests) {
+        List<RequestMessage> requests = (List<RequestMessage>) message;
+        for (final RequestMessage request : requests) {
           sendErrorResponse(connection, request);
         }
       } else {
-        sendErrorResponse(connection, (RequestWrapper) message);
+        sendErrorResponse(connection, (RequestMessage) message);
       }
     }
 
@@ -62,8 +62,8 @@ public class GrizzlyServerHandler extends BaseFilter {
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private void sendErrorResponse(final Connection connection, final RequestWrapper request) throws IOException {
-    ResponseWrapper responseWrapper = new ResponseWrapper(request.getId(), request.getCodecType(), request.getProtocolType());
+  private void sendErrorResponse(final Connection connection, final RequestMessage request) throws IOException {
+    ResponseMessage responseWrapper = new ResponseMessage(request.getId(), request.getCodecType(), request.getProtocolType());
     responseWrapper.setException(new Exception("server threadpool full,maybe because server is slow or too many requests"));
 
     connection.write(responseWrapper, new EmptyCompletionHandler<WriteResult>() {
@@ -98,9 +98,9 @@ public class GrizzlyServerHandler extends BaseFilter {
           threadPool.execute(new HandlerRunnable(connection, messageObject, threadPool));
         }
       } else {
-        RequestWrapper request = (RequestWrapper) message;
+        RequestMessage request = (RequestMessage) message;
         long beginTime = System.currentTimeMillis();
-        ResponseWrapper responseWrapper = ProtocolFactory.getServerHandler(request.getProtocolType()).handleRequest(request);
+        ResponseMessage responseWrapper = ProtocolFactory.getServerHandler(request.getProtocolType()).handleRequest(request);
         final int id = request.getId();
         // already timeout,so not return
         if ((System.currentTimeMillis() - beginTime) >= request.getTimeout()) {

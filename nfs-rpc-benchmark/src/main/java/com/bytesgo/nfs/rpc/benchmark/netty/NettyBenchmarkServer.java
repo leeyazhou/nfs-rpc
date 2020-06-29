@@ -2,6 +2,7 @@ package com.bytesgo.nfs.rpc.benchmark.netty;
 
 import com.bytesgo.nfs.rpc.benchmark.AbstractBenchmarkServer;
 import com.bytesgo.nfs.rpc.core.server.Server;
+import com.bytesgo.nfs.rpc.core.server.ServerConfig;
 import com.bytesgo.nfs.rpc.netty.server.NettyServer;
 
 /**
@@ -15,8 +16,8 @@ public class NettyBenchmarkServer extends AbstractBenchmarkServer {
     new NettyBenchmarkServer().run(args);
   }
 
-  public Server getServer() {
-    return new NettyServer();
+  public Server getServer(ServerConfig serverConfig) {
+    return new NettyServer(serverConfig);
   }
 
 }

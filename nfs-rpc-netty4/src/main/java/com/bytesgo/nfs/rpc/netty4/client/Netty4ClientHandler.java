@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
 /**
  * nfs-rpc Apache License
@@ -20,7 +20,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * 
  * @author <a href="mailto:coderplay@gmail.com">Min Zhou</a>
  */
-public class Netty4ClientHandler extends SimpleChannelInboundHandler<ResponseWrapper> {
+public class Netty4ClientHandler extends SimpleChannelInboundHandler<ResponseMessage> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Netty4ClientHandler.class);
 
@@ -56,9 +56,9 @@ public class Netty4ClientHandler extends SimpleChannelInboundHandler<ResponseWra
   }
 
   @Override
-  protected void channelRead0(ChannelHandlerContext ctx, ResponseWrapper response) throws Exception {
+  protected void channelRead0(ChannelHandlerContext ctx, ResponseMessage response) throws Exception {
     if (isDebugEnabled) {
-      LOGGER.debug("receive response list from server: " + ctx.channel().remoteAddress() + ",request is:" + response.getRequestId());
+      LOGGER.debug("receive response list from server: " + ctx.channel().remoteAddress() + ",request is:" + response.getId());
     }
     client.putResponse(response);
   }

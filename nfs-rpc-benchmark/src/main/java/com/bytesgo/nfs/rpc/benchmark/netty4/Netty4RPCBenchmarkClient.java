@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.bytesgo.nfs.rpc.benchmark.AbstractRPCBenchmarkClient;
-import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkTestService;
-import com.bytesgo.nfs.rpc.core.Codecs;
+import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkService;
+import com.bytesgo.nfs.rpc.core.codec.Codecs;
 import com.bytesgo.nfs.rpc.netty4.client.Netty4ClientInvocationHandler;
 
 /**
@@ -37,10 +37,10 @@ public class Netty4RPCBenchmarkClient extends AbstractRPCBenchmarkClient {
   }
 
   @Override
-  public BenchmarkTestService getProxyInstance(List<InetSocketAddress> servers, int clientNums, int connectTimeout,
+  public BenchmarkService getProxyInstance(List<InetSocketAddress> servers, int clientNums, int connectTimeout,
       String targetInstanceName, Map<String, Integer> methodTimeouts, int codectype, Integer protocolType) {
-    return (BenchmarkTestService) Proxy.newProxyInstance(Netty4RPCBenchmarkClient.class.getClassLoader(),
-        new Class<?>[] { BenchmarkTestService.class }, new Netty4ClientInvocationHandler(servers, clientNums, connectTimeout,
+    return (BenchmarkService) Proxy.newProxyInstance(Netty4RPCBenchmarkClient.class.getClassLoader(),
+        new Class<?>[] { BenchmarkService.class }, new Netty4ClientInvocationHandler(servers, clientNums, connectTimeout,
             targetInstanceName, methodTimeouts, codectype, protocolType));
   }
 

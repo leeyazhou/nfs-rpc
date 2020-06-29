@@ -10,9 +10,9 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.ProtocolFactory;
-import com.bytesgo.nfs.rpc.core.RequestWrapper;
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.core.message.RequestMessage;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
+import com.bytesgo.nfs.rpc.core.protocol.ProtocolFactory;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -26,7 +26,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * 
  * @author <a href="mailto:coderplay@gmail.com">Min Zhou</a>
  */
-public class Netty4ServerHandler extends SimpleChannelInboundHandler<RequestWrapper> {
+public class Netty4ServerHandler extends SimpleChannelInboundHandler<RequestMessage> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Netty4ServerHandler.class);
 
@@ -45,9 +45,9 @@ public class Netty4ServerHandler extends SimpleChannelInboundHandler<RequestWrap
   }
 
   @Override
-  protected void channelRead0(ChannelHandlerContext ctx, RequestWrapper request) throws Exception {
+  protected void channelRead0(ChannelHandlerContext ctx, RequestMessage request) throws Exception {
     long beginTime = System.currentTimeMillis();
-    ResponseWrapper responseWrapper = ProtocolFactory.getServerHandler(request.getProtocolType()).handleRequest(request);
+    ResponseMessage responseWrapper = ProtocolFactory.getServerHandler(request.getProtocolType()).handleRequest(request);
     final int id = request.getId();
     // already timeout,so not return
     if ((System.currentTimeMillis() - beginTime) >= request.getTimeout()) {

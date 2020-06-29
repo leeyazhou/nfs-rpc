@@ -6,18 +6,18 @@
 package com.bytesgo.nfs.rpc.benchmark.service;
 
 import com.bytesgo.nfs.rpc.benchmark.PB.RequestObject;
-import com.bytesgo.nfs.rpc.benchmark.ResponseObject;
+import com.bytesgo.nfs.rpc.benchmark.service.object.ResponseObject;
 
 /**
  * Just for Reflection RPC Benchmark
  * 
  * @author <a href="mailto:bluedavy@gmail.com">bluedavy</a>
  */
-public class BenchmarkTestServiceImpl implements BenchmarkTestService {
+public class BenchmarkServiceImpl implements BenchmarkService {
 
   private int responseSize;
 
-  public BenchmarkTestServiceImpl(int responseSize) {
+  public BenchmarkServiceImpl(int responseSize) {
     this.responseSize = responseSize;
   }
 

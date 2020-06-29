@@ -1,7 +1,7 @@
 package com.bytesgo.nfs.rpc.core.server;
 
-import com.bytesgo.nfs.rpc.core.RequestWrapper;
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.core.message.RequestMessage;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
 /**
  * Server Handler interface,when server receive message,it will handle
@@ -18,6 +18,6 @@ public interface ServerHandler {
 	/**
 	 * handle the request
 	 */
-	ResponseWrapper handleRequest(final RequestWrapper request);
+	ResponseMessage handleRequest(final RequestMessage request);
 
 }

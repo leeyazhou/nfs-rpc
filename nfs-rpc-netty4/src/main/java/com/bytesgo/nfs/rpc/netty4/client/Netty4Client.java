@@ -5,11 +5,11 @@ import java.net.InetSocketAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.RequestWrapper;
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
 import com.bytesgo.nfs.rpc.core.client.AbstractClient;
 import com.bytesgo.nfs.rpc.core.client.Client;
 import com.bytesgo.nfs.rpc.core.client.ClientFactory;
+import com.bytesgo.nfs.rpc.core.message.RequestMessage;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -35,10 +35,10 @@ public class Netty4Client extends AbstractClient {
     this.connectTimeout = connectTimeout;
   }
 
-  public void sendRequest(final RequestWrapper wrapper, final int timeout) throws Exception {
+  public void sendRequest(final RequestMessage message, final int timeout) throws Exception {
     final long beginTime = System.currentTimeMillis();
     final Client self = this;
-    ChannelFuture writeFuture = cf.channel().writeAndFlush(wrapper);
+    ChannelFuture writeFuture = cf.channel().writeAndFlush(message);
     // use listener to avoid wait for write & thread context switch
     writeFuture.addListener(new ChannelFutureListener() {
       public void operationComplete(ChannelFuture future) throws Exception {
@@ -49,10 +49,10 @@ public class Netty4Client extends AbstractClient {
         // write timeout
         if (System.currentTimeMillis() - beginTime >= timeout) {
           errorMsg = "write to send buffer consume too long time(" + (System.currentTimeMillis() - beginTime) + "),request id is:"
-              + wrapper.getId();
+              + message.getId();
         }
         if (future.isCancelled()) {
-          errorMsg = "Send request to " + cf.channel().toString() + " cancelled by user,request id is:" + wrapper.getId();
+          errorMsg = "Send request to " + cf.channel().toString() + " cancelled by user,request id is:" + message.getId();
         }
         if (!future.isSuccess()) {
           if (cf.channel().isActive()) {
@@ -64,7 +64,7 @@ public class Netty4Client extends AbstractClient {
           errorMsg = "Send request to " + cf.channel().toString() + " error" + future.cause();
         }
         LOGGER.error(errorMsg);
-        ResponseWrapper response = new ResponseWrapper(wrapper.getId(), wrapper.getCodecType(), wrapper.getProtocolType());
+        ResponseMessage response = new ResponseMessage(message.getId(), message.getCodecType(), message.getProtocolType());
         response.setException(new Exception(errorMsg));
         self.putResponse(response);
       }

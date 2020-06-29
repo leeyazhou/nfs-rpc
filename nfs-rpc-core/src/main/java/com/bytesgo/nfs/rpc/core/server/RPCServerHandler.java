@@ -12,9 +12,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.Codecs;
-import com.bytesgo.nfs.rpc.core.RequestWrapper;
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.core.codec.Codecs;
+import com.bytesgo.nfs.rpc.core.message.RequestMessage;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
 /**
  * Reflection RPC Server Handler
@@ -47,8 +47,8 @@ public class RPCServerHandler implements ServerHandler {
     }
   }
 
-  public ResponseWrapper handleRequest(final RequestWrapper request) {
-    ResponseWrapper responseWrapper = new ResponseWrapper(request.getId(), request.getCodecType(), request.getProtocolType());
+  public ResponseMessage handleRequest(final RequestMessage request) {
+    ResponseMessage responseWrapper = new ResponseMessage(request.getId(), request.getCodecType(), request.getProtocolType());
     String targetInstanceName = new String(request.getTargetInstanceName());
     String methodName = new String(request.getMethodName());
     byte[][] argTypeBytes = request.getArgTypes();
@@ -77,7 +77,7 @@ public class RPCServerHandler implements ServerHandler {
         if (method == null) {
           throw new Exception("no method: " + methodKeyBuilder.toString() + " find in " + targetInstanceName + " on the server");
         }
-        Object[] tmprequestObjects = request.getRequestObjects();
+        Object[] tmprequestObjects = request.getArgs();
         for (int i = 0; i < tmprequestObjects.length; i++) {
           try {
             requestObjects[i] = Codecs.getDecoder(request.getCodecType()).decode(argTypes[i], (byte[]) tmprequestObjects[i]);

@@ -12,7 +12,7 @@ import com.bytesgo.nfs.rpc.benchmark.PB;
  * 
  * @author <a href="mailto:bluedavy@gmail.com">bluedavy</a>
  */
-public interface BenchmarkTestService {
+public interface BenchmarkService {
 
 	Object execute(Object request);
 

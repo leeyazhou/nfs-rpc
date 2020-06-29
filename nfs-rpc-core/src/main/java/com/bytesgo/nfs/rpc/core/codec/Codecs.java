@@ -1,15 +1,13 @@
-package com.bytesgo.nfs.rpc.core;
+package com.bytesgo.nfs.rpc.core.codec;
 
-import com.bytesgo.nfs.rpc.core.protocol.Decoder;
-import com.bytesgo.nfs.rpc.core.protocol.Encoder;
-import com.bytesgo.nfs.rpc.core.protocol.codec.HessianDecoder;
-import com.bytesgo.nfs.rpc.core.protocol.codec.HessianEncoder;
-import com.bytesgo.nfs.rpc.core.protocol.codec.JavaDecoder;
-import com.bytesgo.nfs.rpc.core.protocol.codec.JavaEncoder;
-import com.bytesgo.nfs.rpc.core.protocol.codec.KryoDecoder;
-import com.bytesgo.nfs.rpc.core.protocol.codec.KryoEncoder;
-import com.bytesgo.nfs.rpc.core.protocol.codec.PBDecoder;
-import com.bytesgo.nfs.rpc.core.protocol.codec.PBEncoder;
+import com.bytesgo.nfs.rpc.core.codec.hessian.HessianDecoder;
+import com.bytesgo.nfs.rpc.core.codec.hessian.HessianEncoder;
+import com.bytesgo.nfs.rpc.core.codec.java.JavaDecoder;
+import com.bytesgo.nfs.rpc.core.codec.java.JavaEncoder;
+import com.bytesgo.nfs.rpc.core.codec.kryo.KryoDecoder;
+import com.bytesgo.nfs.rpc.core.codec.kryo.KryoEncoder;
+import com.bytesgo.nfs.rpc.core.codec.protobuf.ProtobufDecoder;
+import com.bytesgo.nfs.rpc.core.codec.protobuf.ProtobufEncoder;
 
 /**
  * Encoder & Decoder Register
@@ -37,8 +35,8 @@ public class Codecs {
     addEncoder(HESSIAN_CODEC, new HessianEncoder());
     addDecoder(HESSIAN_CODEC, new HessianDecoder());
 
-    addEncoder(PB_CODEC, new PBEncoder());
-    addDecoder(PB_CODEC, new PBDecoder());
+    addEncoder(PB_CODEC, new ProtobufEncoder());
+    addDecoder(PB_CODEC, new ProtobufDecoder());
 
     addEncoder(KRYO_CODEC, new KryoEncoder());
     addDecoder(KRYO_CODEC, new KryoDecoder());

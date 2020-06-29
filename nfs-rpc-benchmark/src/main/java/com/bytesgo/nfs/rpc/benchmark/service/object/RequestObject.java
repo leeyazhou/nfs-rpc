@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.benchmark;
+package com.bytesgo.nfs.rpc.benchmark.service.object;
 
 /**
  * nfs-rpc Apache License
@@ -8,17 +8,17 @@ package com.bytesgo.nfs.rpc.benchmark;
 import java.io.Serializable;
 
 /**
- * Just for RPC Benchmark Test,response object
+ * Just for RPC Benchmark Test,request object
  * 
  * @author <a href="mailto:bluedavy@gmail.com">bluedavy</a>
  */
-public class ResponseObject implements Serializable {
+public class RequestObject implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   private byte[] bytes = null;
 
-  public ResponseObject(int size) {
+  public RequestObject(int size) {
     bytes = new byte[size];
   }
 

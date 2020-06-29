@@ -3,7 +3,7 @@
  * 
  * http://code.google.com/p/nfs-rpc (c) 2011
  */
-package com.bytesgo.nfs.rpc.core.protocol;
+package com.bytesgo.nfs.rpc.core.codec;
 
 /**
  * Encoder Interface
@@ -15,6 +15,6 @@ public interface Encoder {
   /**
    * Encode Object to byte[]
    */
-   byte[] encode(Object object) throws Exception;
+   byte[] encode(Object object) throws CodecException;
 
 }

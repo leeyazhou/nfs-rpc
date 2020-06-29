@@ -1,6 +1,7 @@
-package com.bytesgo.nfs.rpc.core.protocol.codec;
+package com.bytesgo.nfs.rpc.core.codec.kryo;
 
-import com.bytesgo.nfs.rpc.core.protocol.Decoder;
+import com.bytesgo.nfs.rpc.core.codec.CodecException;
+import com.bytesgo.nfs.rpc.core.codec.Decoder;
 import com.esotericsoftware.kryo.io.Input;
 
 /**
@@ -16,7 +17,7 @@ public class KryoDecoder implements Decoder {
    * @throws Exception
    */
   @Override
-  public Object decode(String className, byte[] bytes) throws Exception {
+  public Object decode(String className, byte[] bytes) throws CodecException {
     Input input = new Input(bytes);
     try {
       return KryoUtils.getKryo().readClassAndObject(input);

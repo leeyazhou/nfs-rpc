@@ -18,8 +18,9 @@ import org.glassfish.grizzly.threadpool.ThreadPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.ProtocolFactory;
+import com.bytesgo.nfs.rpc.core.protocol.ProtocolFactory;
 import com.bytesgo.nfs.rpc.core.server.Server;
+import com.bytesgo.nfs.rpc.core.server.ServerConfig;
 import com.bytesgo.nfs.rpc.grizzly.protocol.GrizzlyProtocolFilter;
 
 /**
@@ -29,40 +30,46 @@ import com.bytesgo.nfs.rpc.grizzly.protocol.GrizzlyProtocolFilter;
  */
 public class GrizzlyServer implements Server {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(GrizzlyServer.class);
-  private TCPNIOTransport transport = null;
+	private static final Logger LOGGER = LoggerFactory.getLogger(GrizzlyServer.class);
+	private TCPNIOTransport transport = null;
+	private ServerConfig serverConfig;
 
-  public void start(int listenPort, ExecutorService threadpool) throws Exception {
-    ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) threadpool;
-    ThreadPoolConfig config = ThreadPoolConfig.defaultConfig().copy().setCorePoolSize(threadPoolExecutor.getCorePoolSize())
-        .setMaxPoolSize(threadPoolExecutor.getMaximumPoolSize()).setPoolName("GRIZZLY-SERVER");
-    ExecutorService executorService = GrizzlyExecutorService.createInstance(config);
+	public GrizzlyServer(ServerConfig serverConfig) {
+		this.serverConfig = serverConfig;
+	}
 
-    FilterChainBuilder filterChainBuilder = FilterChainBuilder.stateless();
-    filterChainBuilder.add(new TransportFilter());
-    filterChainBuilder.add(new GrizzlyProtocolFilter());
-    filterChainBuilder.add(new GrizzlyServerHandler(executorService));
-    TCPNIOTransportBuilder builder = TCPNIOTransportBuilder.newInstance();
-    builder.setOptimizedForMultiplexing(true);
-    builder.setIOStrategy(SameThreadIOStrategy.getInstance());
+	public void start() throws Exception {
+		ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) serverConfig.getBusinessThreadPool();
+		ThreadPoolConfig config = ThreadPoolConfig.defaultConfig().copy()
+				.setCorePoolSize(threadPoolExecutor.getCorePoolSize())
+				.setMaxPoolSize(threadPoolExecutor.getMaximumPoolSize()).setPoolName("GRIZZLY-SERVER");
+		ExecutorService executorService = GrizzlyExecutorService.createInstance(config);
 
-    transport = builder.build();
+		FilterChainBuilder filterChainBuilder = FilterChainBuilder.stateless();
+		filterChainBuilder.add(new TransportFilter());
+		filterChainBuilder.add(new GrizzlyProtocolFilter());
+		filterChainBuilder.add(new GrizzlyServerHandler(executorService));
+		TCPNIOTransportBuilder builder = TCPNIOTransportBuilder.newInstance();
+		builder.setOptimizedForMultiplexing(true);
+		builder.setIOStrategy(SameThreadIOStrategy.getInstance());
 
-    transport.setProcessor(filterChainBuilder.build());
-    transport.bind(listenPort);
+		transport = builder.build();
 
-    transport.start();
-    LOGGER.warn("server started,listen at: " + listenPort);
-  }
+		transport.setProcessor(filterChainBuilder.build());
+		transport.bind(serverConfig.getHost(), serverConfig.getPort());
 
-  public void stop() throws Exception {
-    if (transport != null) {
-      transport.stop();
-      LOGGER.warn("server stoped!");
-    }
-  }
+		transport.start();
+		LOGGER.warn("server started,listen at: " + serverConfig.getPort());
+	}
 
-  public void registerProcessor(int protocolType, String serviceName, Object serviceInstance) {
-    ProtocolFactory.getServerHandler(protocolType).registerProcessor(serviceName, serviceInstance);
-  }
+	public void stop() throws Exception {
+		if (transport != null) {
+			transport.stop();
+			LOGGER.warn("server stoped!");
+		}
+	}
+
+	public void registerProcessor(int protocolType, String serviceName, Object serviceInstance) {
+		ProtocolFactory.getServerHandler(protocolType).registerProcessor(serviceName, serviceInstance);
+	}
 }

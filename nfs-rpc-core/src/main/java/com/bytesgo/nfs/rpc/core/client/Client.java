@@ -7,7 +7,7 @@ package com.bytesgo.nfs.rpc.core.client;
 
 import java.util.List;
 
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
 /**
  * RPC Client Interface
@@ -31,28 +31,24 @@ public interface Client {
 	/**
 	 * invoke sync via rpc
 	 * 
-	 * @param targetInstanceName server instance name
-	 * @param methodName         server method name
-	 * @param argTypes           server method arg types
-	 * @param args               send to server request args
-	 * @param timeout            rcp timeout
-	 * @param codecType          serialize/deserialize type
+	 * @param invocation   {@link Invocation}
+	 * @param timeout      rcp timeout
+	 * @param codecType    serialize/deserialize type
 	 * @param protocolType
 	 * @return Object return response
 	 * @throws Exception if some exception,then will be throwed
 	 */
-	Object invokeSync(String targetInstanceName, String methodName, String[] argTypes, Object[] args, int timeout,
-			int codecType, int protocolType) throws Exception;
+	Object invokeSync(Invocation invocation, int timeout, int codecType, int protocolType) throws Exception;
 
 	/**
 	 * receive response from server
 	 */
-	void putResponse(ResponseWrapper response) throws Exception;
+	void putResponse(ResponseMessage response) throws Exception;
 
 	/**
 	 * receive responses from server
 	 */
-	void putResponses(List<ResponseWrapper> responses) throws Exception;
+	void putResponses(List<ResponseMessage> responses) throws Exception;
 
 	/**
 	 * server address

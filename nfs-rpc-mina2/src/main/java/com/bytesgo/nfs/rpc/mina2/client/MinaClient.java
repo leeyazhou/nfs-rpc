@@ -14,11 +14,11 @@ import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.RequestWrapper;
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
 import com.bytesgo.nfs.rpc.core.client.AbstractClient;
 import com.bytesgo.nfs.rpc.core.client.Client;
 import com.bytesgo.nfs.rpc.core.client.ClientFactory;
+import com.bytesgo.nfs.rpc.core.message.RequestMessage;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
 /**
  * Mina Client
@@ -44,7 +44,7 @@ public class MinaClient extends AbstractClient {
   }
 
   @SuppressWarnings("rawtypes")
-  public void sendRequest(final RequestWrapper wrapper, final int timeout) throws Exception {
+  public void sendRequest(final RequestMessage wrapper, final int timeout) throws Exception {
     final long beginTime = System.currentTimeMillis();
     WriteFuture writeFuture = session.write(wrapper);
     final Client self = this;
@@ -61,7 +61,7 @@ public class MinaClient extends AbstractClient {
               + timeout;
         }
         LOGGER.error(error);
-        ResponseWrapper response = new ResponseWrapper(wrapper.getId(), wrapper.getCodecType(), wrapper.getProtocolType());
+        ResponseMessage response = new ResponseMessage(wrapper.getId(), wrapper.getCodecType(), wrapper.getProtocolType());
         response.setException(new Exception(error));
         try {
           putResponse(response);

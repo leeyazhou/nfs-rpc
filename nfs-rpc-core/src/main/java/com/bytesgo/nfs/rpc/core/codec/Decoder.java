@@ -3,7 +3,7 @@
  * 
  * http://code.google.com/p/nfs-rpc (c) 2011
  */
-package com.bytesgo.nfs.rpc.core.protocol;
+package com.bytesgo.nfs.rpc.core.codec;
 
 /**
  * Decoder Interface
@@ -15,6 +15,6 @@ public interface Decoder {
   /**
    * decode byte[] to Object
    */
-   Object decode(String className, byte[] bytes) throws Exception;
+   Object decode(String className, byte[] bytes) throws CodecException;
 
 }

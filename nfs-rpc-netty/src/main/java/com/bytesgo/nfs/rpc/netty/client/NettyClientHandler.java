@@ -16,7 +16,7 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
 /**
  * Netty Client Handler
@@ -47,18 +47,18 @@ public class NettyClientHandler extends SimpleChannelUpstreamHandler {
   public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
     if (e.getMessage() instanceof List) {
       @SuppressWarnings("unchecked")
-      List<ResponseWrapper> responses = (List<ResponseWrapper>) e.getMessage();
+      List<ResponseMessage> responses = (List<ResponseMessage>) e.getMessage();
       if (isDebugEnabled) {
         // for performance trace
         LOGGER.debug("receive response list from server: " + ctx.getChannel().getRemoteAddress() + ",list size is:" + responses.size());
       }
       client.putResponses(responses);
-    } else if (e.getMessage() instanceof ResponseWrapper) {
-      ResponseWrapper response = (ResponseWrapper) e.getMessage();
+    } else if (e.getMessage() instanceof ResponseMessage) {
+      ResponseMessage response = (ResponseMessage) e.getMessage();
       if (isDebugEnabled) {
         // for performance trace
         LOGGER
-            .debug("receive response list from server: " + ctx.getChannel().getRemoteAddress() + ",request is:" + response.getRequestId());
+            .debug("receive response list from server: " + ctx.getChannel().getRemoteAddress() + ",request is:" + response.getId());
       }
       client.putResponse(response);
     } else {

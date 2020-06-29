@@ -13,8 +13,8 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 
-import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkTestService;
-import com.bytesgo.nfs.rpc.core.Codecs;
+import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkService;
+import com.bytesgo.nfs.rpc.core.codec.Codecs;
 import com.bytesgo.nfs.rpc.core.protocol.RPCProtocol;
 
 /**
@@ -43,7 +43,7 @@ public abstract class AbstractRPCBenchmarkClient extends AbstractBenchmarkClient
   /*
    * return ProxyObject
    */
-  public abstract BenchmarkTestService getProxyInstance(List<InetSocketAddress> servers, int clientNums, int connectTimeout,
+  public abstract BenchmarkService getProxyInstance(List<InetSocketAddress> servers, int clientNums, int connectTimeout,
       String targetInstanceName, Map<String, Integer> methodTimeouts, int codectype, Integer protocolType);
 
 }

@@ -1,8 +1,5 @@
-package com.bytesgo.nfs.rpc.core;
+package com.bytesgo.nfs.rpc.core.protocol;
 
-import com.bytesgo.nfs.rpc.core.protocol.Protocol;
-import com.bytesgo.nfs.rpc.core.protocol.RPCProtocol;
-import com.bytesgo.nfs.rpc.core.protocol.SimpleProcessorProtocol;
 import com.bytesgo.nfs.rpc.core.server.RPCServerHandler;
 import com.bytesgo.nfs.rpc.core.server.ServerHandler;
 import com.bytesgo.nfs.rpc.core.server.SimpleProcessorServerHandler;

@@ -1,19 +1,14 @@
 package com.bytesgo.nfs.rpc.core.server;
 
-/**
- * nfs-rpc Apache License
- * 
- * http://code.google.com/p/nfs-rpc (c) 2011
- */
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.Codecs;
-import com.bytesgo.nfs.rpc.core.RequestWrapper;
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.core.codec.Codecs;
+import com.bytesgo.nfs.rpc.core.message.RequestMessage;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
 /**
  * Direct Call RPC Server Handler
@@ -24,14 +19,14 @@ public class SimpleProcessorServerHandler implements ServerHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SimpleProcessorServerHandler.class);
 
-  private Map<String, ServerProcessor> processors = new ConcurrentHashMap<String, ServerProcessor>();
+  private final ConcurrentMap<String, ServerProcessor> processors = new ConcurrentHashMap<String, ServerProcessor>();
 
   public void registerProcessor(String instanceName, Object instance) {
     processors.put(instanceName, (ServerProcessor) instance);
   }
 
-  public ResponseWrapper handleRequest(final RequestWrapper request) {
-    ResponseWrapper responseWrapper = new ResponseWrapper(request.getId(), request.getCodecType(), request.getProtocolType());
+  public ResponseMessage handleRequest(final RequestMessage request) {
+    ResponseMessage responseWrapper = new ResponseMessage(request.getId(), request.getCodecType(), request.getProtocolType());
     try {
       String argType = null;
       if (request.getArgTypes() != null && request.getArgTypes()[0] != null) {

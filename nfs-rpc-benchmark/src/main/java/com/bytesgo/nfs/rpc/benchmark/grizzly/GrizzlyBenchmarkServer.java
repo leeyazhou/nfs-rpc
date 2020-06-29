@@ -2,6 +2,7 @@ package com.bytesgo.nfs.rpc.benchmark.grizzly;
 
 import com.bytesgo.nfs.rpc.benchmark.AbstractBenchmarkServer;
 import com.bytesgo.nfs.rpc.core.server.Server;
+import com.bytesgo.nfs.rpc.core.server.ServerConfig;
 import com.bytesgo.nfs.rpc.grizzly.server.GrizzlyServer;
 
 /**
@@ -19,7 +20,7 @@ public class GrizzlyBenchmarkServer extends AbstractBenchmarkServer {
     }
   }
 
-  public Server getServer() {
-    return new GrizzlyServer();
+  public Server getServer(ServerConfig serverConfig) {
+    return new GrizzlyServer(serverConfig);
   }
 }

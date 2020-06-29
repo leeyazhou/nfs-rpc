@@ -13,7 +13,7 @@ import org.apache.mina.common.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
 /**
  * Mina Client processor for receive message,handle exception
@@ -44,17 +44,17 @@ public class MinaClientProcessor extends IoHandlerAdapter {
   public void messageReceived(IoSession session, Object message) throws Exception {
     if (message instanceof List) {
       @SuppressWarnings("unchecked")
-      List<ResponseWrapper> responses = (List<ResponseWrapper>) message;
+      List<ResponseMessage> responses = (List<ResponseMessage>) message;
       if (isDebugEnabled) {
         // for performance trace
         LOGGER.debug("receive response list from server: " + session.getRemoteAddress() + ",list size is:" + responses.size());
       }
       client.putResponses(responses);
-    } else if (message instanceof ResponseWrapper) {
-      ResponseWrapper response = (ResponseWrapper) message;
+    } else if (message instanceof ResponseMessage) {
+      ResponseMessage response = (ResponseMessage) message;
       if (isDebugEnabled) {
         // for performance trace
-        LOGGER.debug("receive response list from server: " + session.getRemoteAddress() + ",request is:" + response.getRequestId());
+        LOGGER.debug("receive response list from server: " + session.getRemoteAddress() + ",request is:" + response.getId());
       }
       client.putResponse(response);
     } else {

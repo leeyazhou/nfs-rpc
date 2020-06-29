@@ -11,9 +11,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.Codecs;
-import com.bytesgo.nfs.rpc.core.RequestWrapper;
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.core.NFSException;
+import com.bytesgo.nfs.rpc.core.codec.Codecs;
+import com.bytesgo.nfs.rpc.core.message.RequestMessage;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
 /**
  * Common RPC Protocol
@@ -52,25 +53,25 @@ public class RPCProtocol implements Protocol {
 
   private static final byte RESPONSE = (byte) 1;
 
-  public ByteBufferWrapper encode(Object message, ByteBufferWrapper bytebufferWrapper) throws Exception {
-    if (!(message instanceof RequestWrapper) && !(message instanceof ResponseWrapper)) {
-      throw new Exception("only support send RequestWrapper && ResponseWrapper");
+  public ByteBufferWrapper encode(Object message, ByteBufferWrapper bytebufferWrapper) throws ProtocolException {
+    if (!(message instanceof RequestMessage) && !(message instanceof ResponseMessage)) {
+      throw new NFSException("only support send RequestWrapper && ResponseWrapper");
     }
     int id = 0;
     byte type = REQUEST;
-    if (message instanceof RequestWrapper) {
+    if (message instanceof RequestMessage) {
       try {
         int requestArgTypesLen = 0;
         int requestArgsLen = 0;
         List<byte[]> requestArgTypes = new ArrayList<byte[]>();
         List<byte[]> requestArgs = new ArrayList<byte[]>();
-        RequestWrapper request = (RequestWrapper) message;
+        RequestMessage request = (RequestMessage) message;
         byte[][] requestArgTypeStrings = request.getArgTypes();
         for (byte[] requestArgType : requestArgTypeStrings) {
           requestArgTypes.add(requestArgType);
           requestArgTypesLen += requestArgType.length;
         }
-        Object[] requestObjects = request.getRequestObjects();
+        Object[] requestObjects = request.getArgs();
         if (requestObjects != null) {
           for (Object requestArg : requestObjects) {
             byte[] requestArgByte = Codecs.getEncoder(request.getCodecType()).encode(requestArg);
@@ -115,10 +116,10 @@ public class RPCProtocol implements Protocol {
         return byteBuffer;
       } catch (Exception e) {
         LOGGER.error("encode request object error", e);
-        throw e;
+        throw new NFSException(e);
       }
     } else {
-      ResponseWrapper response = (ResponseWrapper) message;
+      ResponseMessage response = (ResponseMessage) message;
       byte[] body = new byte[0];
       byte[] className = new byte[0];
       try {
@@ -131,7 +132,7 @@ public class RPCProtocol implements Protocol {
           className = response.getException().getClass().getName().getBytes();
           body = Codecs.getEncoder(response.getCodecType()).encode(response.getException());
         }
-        id = response.getRequestId();
+        id = response.getId();
       } catch (Exception e) {
         LOGGER.error("encode response object error", e);
         // still create responsewrapper,so client can get exception
@@ -159,7 +160,7 @@ public class RPCProtocol implements Protocol {
     }
   }
 
-  public Object decode(ByteBufferWrapper wrapper, Object errorObject, int... originPosArray) throws Exception {
+  public Object decode(ByteBufferWrapper wrapper, Object errorObject, int... originPosArray) throws ProtocolException {
     final int originPos;
     if (originPosArray != null && originPosArray.length == 1) {
       originPos = originPosArray[0];
@@ -224,7 +225,7 @@ public class RPCProtocol implements Protocol {
           wrapper.readBytes(argByte);
           args[i] = argByte;
         }
-        RequestWrapper requestWrapper = new RequestWrapper(targetInstanceByte, methodNameByte, argTypes, args, timeout, requestId,
+        RequestMessage requestWrapper = new RequestMessage(targetInstanceByte, methodNameByte, argTypes, args, timeout, requestId,
             codecType, TYPE);
         int messageLen = ProtocolUtils.HEADER_LEN + REQUEST_HEADER_LEN + expectedLenInfoLen + expectedLen;
         requestWrapper.setMessageLen(messageLen);
@@ -250,7 +251,7 @@ public class RPCProtocol implements Protocol {
         wrapper.readBytes(classNameBytes);
         byte[] bodyBytes = new byte[bodyLen];
         wrapper.readBytes(bodyBytes);
-        ResponseWrapper responseWrapper = new ResponseWrapper(requestId, codecType, TYPE);
+        ResponseMessage responseWrapper = new ResponseMessage(requestId, codecType, TYPE);
         responseWrapper.setResponse(bodyBytes);
         responseWrapper.setResponseClassName(classNameBytes);
         int messageLen = ProtocolUtils.HEADER_LEN + RESPONSE_HEADER_LEN + classNameLen + bodyLen;

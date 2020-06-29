@@ -8,9 +8,9 @@ package com.bytesgo.nfs.rpc.grizzly.client;
 import org.glassfish.grizzly.CompletionHandler;
 import org.glassfish.grizzly.Connection;
 
-import com.bytesgo.nfs.rpc.core.RequestWrapper;
 import com.bytesgo.nfs.rpc.core.client.AbstractClient;
 import com.bytesgo.nfs.rpc.core.client.ClientFactory;
+import com.bytesgo.nfs.rpc.core.message.RequestMessage;
 
 /**
  * Grizzly Client
@@ -34,7 +34,7 @@ public class GrizzlyClient extends AbstractClient {
   }
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  public void sendRequest(RequestWrapper wrapper, int timeout) throws Exception {
+  public void sendRequest(RequestMessage wrapper, int timeout) throws Exception {
     connection.write(wrapper, new CompletionHandler() {
 
       public void cancelled() {

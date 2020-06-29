@@ -1,6 +1,7 @@
-package com.bytesgo.nfs.rpc.core.protocol.codec;
+package com.bytesgo.nfs.rpc.core.codec.kryo;
 
-import com.bytesgo.nfs.rpc.core.protocol.Encoder;
+import com.bytesgo.nfs.rpc.core.codec.CodecException;
+import com.bytesgo.nfs.rpc.core.codec.Encoder;
 import com.esotericsoftware.kryo.io.Output;
 
 /**
@@ -15,7 +16,7 @@ public class KryoEncoder implements Encoder {
    * @throws Exception
    */
   @Override
-  public byte[] encode(Object object) throws Exception {
+  public byte[] encode(Object object) throws CodecException {
     Output output = new Output(256);
     KryoUtils.getKryo().writeClassAndObject(output, object);
     try {

@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.core;
+package com.bytesgo.nfs.rpc.core.util.concurrent;
 
 /**
  * nfs-rpc Apache License
@@ -15,12 +15,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class NamedThreadFactory implements ThreadFactory {
 
-	static final AtomicInteger poolNumber = new AtomicInteger(1);
+	private static final AtomicInteger poolNumber = new AtomicInteger(1);
 
-	final AtomicInteger threadNumber = new AtomicInteger(1);
-	final ThreadGroup group;
-	final String namePrefix;
-	final boolean isDaemon;
+	private final AtomicInteger threadNumber = new AtomicInteger(1);
+	private final ThreadGroup group;
+	private final String namePrefix;
+	private final boolean isDaemon;
 
 	public NamedThreadFactory() {
 		this("pool");

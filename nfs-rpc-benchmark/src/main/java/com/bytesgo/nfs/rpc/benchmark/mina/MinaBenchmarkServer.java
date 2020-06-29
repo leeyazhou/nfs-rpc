@@ -2,6 +2,7 @@ package com.bytesgo.nfs.rpc.benchmark.mina;
 
 import com.bytesgo.nfs.rpc.benchmark.AbstractBenchmarkServer;
 import com.bytesgo.nfs.rpc.core.server.Server;
+import com.bytesgo.nfs.rpc.core.server.ServerConfig;
 import com.bytesgo.nfs.rpc.mina.server.MinaServer;
 
 /**
@@ -15,8 +16,8 @@ public class MinaBenchmarkServer extends AbstractBenchmarkServer {
     new MinaBenchmarkServer().run(args);
   }
 
-  public Server getServer() {
-    return new MinaServer();
+  public Server getServer(ServerConfig serverConfig) {
+    return new MinaServer(serverConfig);
   }
 
 }

@@ -1,5 +1,6 @@
 package com.bytesgo.nfs.rpc.benchmark;
 
+import com.bytesgo.nfs.rpc.benchmark.service.object.RequestObject;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;

@@ -13,8 +13,10 @@ import java.util.concurrent.CyclicBarrier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkTestService;
-import com.bytesgo.nfs.rpc.core.Codecs;
+import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkService;
+import com.bytesgo.nfs.rpc.benchmark.service.object.RequestObject;
+import com.bytesgo.nfs.rpc.benchmark.service.object.ResponseObject;
+import com.bytesgo.nfs.rpc.core.codec.Codecs;
 import com.google.protobuf.ByteString;
 
 /**
@@ -36,7 +38,7 @@ public class RPCBenchmarkClientRunnable implements ClientRunnable {
 
   private boolean running = true;
 
-  private BenchmarkTestService testService;
+  private BenchmarkService testService;
 
   // response time spread
   private long[] responseSpreads = new long[9];
@@ -61,7 +63,7 @@ public class RPCBenchmarkClientRunnable implements ClientRunnable {
 
   private int codecType;
 
-  public RPCBenchmarkClientRunnable(BenchmarkTestService testService, int requestSize, CyclicBarrier barrier, CountDownLatch latch,
+  public RPCBenchmarkClientRunnable(BenchmarkService testService, int requestSize, CyclicBarrier barrier, CountDownLatch latch,
       long startTime, long endTime, int codecType) {
     this.testService = testService;
     this.codecType = codecType;

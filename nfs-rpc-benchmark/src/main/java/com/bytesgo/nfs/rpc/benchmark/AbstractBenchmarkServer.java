@@ -9,19 +9,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkTestServiceImpl;
-import com.bytesgo.nfs.rpc.benchmark.service.PBBenchmarkTestServiceImpl;
-import com.bytesgo.nfs.rpc.core.NamedThreadFactory;
+import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkServiceImpl;
+import com.bytesgo.nfs.rpc.benchmark.service.object.RequestObject;
+import com.bytesgo.nfs.rpc.benchmark.service.object.ResponseObject;
+import com.bytesgo.nfs.rpc.benchmark.service.BenchmarkPBServiceImpl;
+import com.bytesgo.nfs.rpc.core.codec.kryo.KryoUtils;
+import com.bytesgo.nfs.rpc.core.codec.protobuf.ProtobufDecoder;
 import com.bytesgo.nfs.rpc.core.protocol.RPCProtocol;
 import com.bytesgo.nfs.rpc.core.protocol.SimpleProcessorProtocol;
-import com.bytesgo.nfs.rpc.core.protocol.codec.KryoUtils;
-import com.bytesgo.nfs.rpc.core.protocol.codec.PBDecoder;
 import com.bytesgo.nfs.rpc.core.server.Server;
+import com.bytesgo.nfs.rpc.core.server.ServerConfig;
 import com.bytesgo.nfs.rpc.core.server.ServerProcessor;
+import com.bytesgo.nfs.rpc.core.util.concurrent.NamedThreadFactory;
 import com.esotericsoftware.kryo.serializers.DefaultArraySerializers;
 import com.google.protobuf.ByteString;
 
@@ -43,18 +45,22 @@ public abstract class AbstractBenchmarkServer {
 		int listenPort = Integer.parseInt(args[0]);
 		int maxThreads = Integer.parseInt(args[1]);
 		final int responseSize = Integer.parseInt(args[2]);
-		System.out.println(dateFormat.format(new Date()) + " ready to start server,listenPort is: " + listenPort
-				+ ",maxThreads is:" + maxThreads + ",responseSize is:" + responseSize + " bytes");
-
-		Server server = getServer();
+		System.out.println(dateFormat.format(new Date()) + " ready to start server,listenPort : " + listenPort
+				+ ",maxThreads : " + maxThreads + ", responseSize : " + responseSize + " bytes");
+		ServerConfig serverConfig = new ServerConfig();
+		ExecutorService threadPool = new ThreadPoolExecutor(20, maxThreads, 300, TimeUnit.SECONDS,
+				new SynchronousQueue<Runnable>(), new NamedThreadFactory("worker"));
+		serverConfig.setBusinessThreadPool(threadPool).setHost("127.0.0.1").setPort(listenPort);
+		
+		Server server = getServer(serverConfig);
 		server.registerProcessor(SimpleProcessorProtocol.TYPE, RequestObject.class.getName(), new ServerProcessor() {
 			public Object handle(Object request) throws Exception {
 				return new ResponseObject(responseSize);
 			}
 		});
 		// for pb codec
-		PBDecoder.addMessage(PB.RequestObject.class.getName(), PB.RequestObject.getDefaultInstance());
-		PBDecoder.addMessage(PB.ResponseObject.class.getName(), PB.ResponseObject.getDefaultInstance());
+		ProtobufDecoder.addMessage(PB.RequestObject.class.getName(), PB.RequestObject.getDefaultInstance());
+		ProtobufDecoder.addMessage(PB.ResponseObject.class.getName(), PB.ResponseObject.getDefaultInstance());
 		server.registerProcessor(SimpleProcessorProtocol.TYPE, PB.RequestObject.class.getName(), new ServerProcessor() {
 			public Object handle(Object request) throws Exception {
 				PB.ResponseObject.Builder builder = PB.ResponseObject.newBuilder();
@@ -62,21 +68,19 @@ public abstract class AbstractBenchmarkServer {
 				return builder.build();
 			}
 		});
-		server.registerProcessor(RPCProtocol.TYPE, "testservice", new BenchmarkTestServiceImpl(responseSize));
-		server.registerProcessor(RPCProtocol.TYPE, "testservicepb", new PBBenchmarkTestServiceImpl(responseSize));
+		server.registerProcessor(RPCProtocol.TYPE, "testservice", new BenchmarkServiceImpl(responseSize));
+		server.registerProcessor(RPCProtocol.TYPE, "testservicepb", new BenchmarkPBServiceImpl(responseSize));
 		KryoUtils.registerClass(byte[].class, new DefaultArraySerializers.ByteArraySerializer(), 0);
 		KryoUtils.registerClass(RequestObject.class, new RequestObjectSerializer(), 1);
 		KryoUtils.registerClass(ResponseObject.class, new ResponseObjectSerializer(), 2);
 
-		ThreadFactory tf = new NamedThreadFactory("worker");
-		ExecutorService threadPool = new ThreadPoolExecutor(20, maxThreads, 300, TimeUnit.SECONDS,
-				new SynchronousQueue<Runnable>(), tf);
-		server.start(listenPort, threadPool);
+		
+		server.start();
 	}
 
 	/**
 	 * Get server instance
 	 */
-	public abstract Server getServer();
+	public abstract Server getServer(ServerConfig serverConfig);
 
 }

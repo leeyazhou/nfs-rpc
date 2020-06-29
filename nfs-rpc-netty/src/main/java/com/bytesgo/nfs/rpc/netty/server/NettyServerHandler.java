@@ -20,9 +20,9 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bytesgo.nfs.rpc.core.ProtocolFactory;
-import com.bytesgo.nfs.rpc.core.RequestWrapper;
-import com.bytesgo.nfs.rpc.core.ResponseWrapper;
+import com.bytesgo.nfs.rpc.core.message.RequestMessage;
+import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
+import com.bytesgo.nfs.rpc.core.protocol.ProtocolFactory;
 
 /**
  * Netty Server Handler
@@ -48,7 +48,7 @@ public class NettyServerHandler extends SimpleChannelUpstreamHandler {
 
   public void messageReceived(final ChannelHandlerContext ctx, MessageEvent e) throws Exception {
     Object message = e.getMessage();
-    if (!(message instanceof RequestWrapper) && !(message instanceof List)) {
+    if (!(message instanceof RequestMessage) && !(message instanceof List)) {
       LOGGER.error("receive message error,only support RequestWrapper || List");
       throw new Exception("receive message error,only support RequestWrapper || List");
     }
@@ -62,18 +62,18 @@ public class NettyServerHandler extends SimpleChannelUpstreamHandler {
     } catch (RejectedExecutionException exception) {
       LOGGER.error("server threadpool full,threadpool maxsize is:" + ((ThreadPoolExecutor) threadpool).getMaximumPoolSize());
       if (message instanceof List) {
-        List<RequestWrapper> requests = (List<RequestWrapper>) message;
-        for (final RequestWrapper request : requests) {
+        List<RequestMessage> requests = (List<RequestMessage>) message;
+        for (final RequestMessage request : requests) {
           sendErrorResponse(ctx, request);
         }
       } else {
-        sendErrorResponse(ctx, (RequestWrapper) message);
+        sendErrorResponse(ctx, (RequestMessage) message);
       }
     }
   }
 
-  private void sendErrorResponse(final ChannelHandlerContext ctx, final RequestWrapper request) {
-    ResponseWrapper responseWrapper = new ResponseWrapper(request.getId(), request.getCodecType(), request.getProtocolType());
+  private void sendErrorResponse(final ChannelHandlerContext ctx, final RequestMessage request) {
+    ResponseMessage responseWrapper = new ResponseMessage(request.getId(), request.getCodecType(), request.getProtocolType());
     responseWrapper.setException(new Exception("server threadpool full,maybe because server is slow or too many requests"));
     ChannelFuture wf = ctx.getChannel().write(responseWrapper);
     wf.addListener(new ChannelFutureListener() {
@@ -108,9 +108,9 @@ public class NettyServerHandler extends SimpleChannelUpstreamHandler {
           threadPool.execute(new HandlerRunnable(ctx, messageObject, threadPool));
         }
       } else {
-        RequestWrapper request = (RequestWrapper) message;
+        RequestMessage request = (RequestMessage) message;
         long beginTime = System.currentTimeMillis();
-        ResponseWrapper responseWrapper = ProtocolFactory.getServerHandler(request.getProtocolType()).handleRequest(request);
+        ResponseMessage responseWrapper = ProtocolFactory.getServerHandler(request.getProtocolType()).handleRequest(request);
         final int id = request.getId();
         // already timeout,so not return
         if ((System.currentTimeMillis() - beginTime) >= request.getTimeout()) {
