@@ -167,7 +167,9 @@
               <publishingServerId>ossrh</publishingServerId>
               <autoPublish>true</autoPublish>
               <waitUntil>published</waitUntil>
-              <ignorePublishedComponents>nfs-rpc-benchmark</ignorePublishedComponents>
+              <excludeArtifacts>
+              	<excludeArtifact>nfs-rpc-benchmark</excludeArtifact>
+              </excludeArtifacts>
             </configuration>
           </plugin>
         </plugins>
