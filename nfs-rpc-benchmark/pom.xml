@@ -8,7 +8,6 @@
   </parent>
   <artifactId>nfs-rpc-benchmark</artifactId>
   <properties>
-  	<skipPublishing>true</skipPublishing>
   </properties>
 
   <dependencies>
