@@ -20,8 +20,11 @@
     <module>nfs-rpc-codec</module>
   </modules>
   <properties>
+    <commons.lang3.version>3.18.0</commons.lang3.version>
+    <grizzly.version>2.2.9</grizzly.version>
     <hessian.version>4.0.66</hessian.version>
     <jdk.version>1.8</jdk.version>
+    <junit.jupiter.api.version>5.12.2</junit.jupiter.api.version>
     <junit.version>4.13.1</junit.version>
     <kryo.version>4.0.0</kryo.version>
     <mina.version>2.2.4</mina.version>
@@ -32,6 +35,13 @@
   </properties>
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-bom</artifactId>
+        <version>${netty.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
       <dependency>
         <groupId>com.caucho</groupId>
         <artifactId>hessian</artifactId>
@@ -48,16 +58,19 @@
         <version>${protobuf.version}</version>
       </dependency>
       <dependency>
-        <groupId>io.netty</groupId>
-        <artifactId>netty-bom</artifactId>
-        <scope>import</scope>
-        <type>pom</type>
-        <version>${netty.version}</version>
-      </dependency>
-      <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
-        <version>3.18.0</version>
+        <version>${commons.lang3.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.mina</groupId>
+        <artifactId>mina-core</artifactId>
+        <version>${mina.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.glassfish.grizzly</groupId>
+        <artifactId>grizzly-framework</artifactId>
+        <version>${grizzly.version}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -70,17 +83,17 @@
         <version>${slf4j.version}</version>
       </dependency>
       <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${junit.version}</version>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>${junit.jupiter.api.version}</version>
         <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
