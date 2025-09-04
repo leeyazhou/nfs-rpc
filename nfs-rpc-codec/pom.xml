@@ -7,6 +7,7 @@
     <version>1.0.1</version>
   </parent>
   <artifactId>nfs-rpc-codec</artifactId>
+  <name>NFS RPC Codec</name>
   <dependencies>
     <dependency>
       <groupId>com.caucho</groupId>

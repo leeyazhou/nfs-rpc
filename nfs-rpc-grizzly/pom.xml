@@ -9,7 +9,7 @@
   <artifactId>nfs-rpc-grizzly</artifactId>
   <packaging>jar</packaging>
 
-  <name>nfs-rpc-grizzly</name>
+  <name>NFS RPC Grizzly</name>
   <url>http://bluedavy.com/projects/rpc-benchmark/grizzly</url>
 
   <dependencies>

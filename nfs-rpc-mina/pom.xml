@@ -9,6 +9,7 @@
 
   <artifactId>nfs-rpc-mina</artifactId>
   <packaging>jar</packaging>
+  <name>NFS RPC MINA</name>
 
   <dependencies>
     <dependency>

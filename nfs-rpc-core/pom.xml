@@ -8,6 +8,7 @@
   </parent>
 
   <artifactId>nfs-rpc-core</artifactId>
+  <name>NFS RPC Core</name>
 
   <dependencies>
     <dependency>
