@@ -27,7 +27,7 @@ public class ResponseObjectSerializer extends Serializer<ResponseObject> {
    * @param kryo
    * @param input
    * @param type
-   * @return
+   * @return ResponseObject
    */
   public ResponseObject create(Kryo kryo, Input input, Class<ResponseObject> type) {
     return new ResponseObject(input.getBuffer().length - 1);

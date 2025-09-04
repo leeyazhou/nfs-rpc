@@ -19,7 +19,7 @@ public interface Protocol {
 	 * @param byteBuffer
 	 * @throws Exception
 	 */
-	ByteBufferWrapper encode(Object message, ByteBufferWrapper bytebufferWrapper) throws ProtocolException;
+	ByteBufferWrapper encode(Object message, ByteBufferWrapper bytebuffer) throws ProtocolException;
 
 	/**
 	 * decode stream to object

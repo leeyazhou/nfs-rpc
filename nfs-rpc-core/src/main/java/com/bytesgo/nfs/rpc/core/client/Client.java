@@ -67,7 +67,7 @@ public interface Client {
 	/**
 	 * connect timeout
 	 * 
-	 * @return
+	 * @return int
 	 */
 	int getConnectTimeout();
 
