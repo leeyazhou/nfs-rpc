@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.benchmark.mina2;
+package com.bytesgo.nfs.rpc.benchmark.mina;
 
 import com.bytesgo.nfs.rpc.benchmark.AbstractBenchmarkServer;
 import com.bytesgo.nfs.rpc.core.server.Server;

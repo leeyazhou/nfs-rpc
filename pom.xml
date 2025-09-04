@@ -14,8 +14,8 @@
   <modules>
     <module>nfs-rpc-core</module>
     <module>nfs-rpc-grizzly</module>
-    <module>nfs-rpc-mina2</module>
-    <module>nfs-rpc-netty4</module>
+    <module>nfs-rpc-mina</module>
+    <module>nfs-rpc-netty</module>
     <module>nfs-rpc-benchmark</module>
     <module>nfs-rpc-codec</module>
   </modules>
@@ -25,9 +25,7 @@
     <junit.version>4.13.1</junit.version>
     <kryo.version>4.0.0</kryo.version>
     <mina.version>2.2.4</mina.version>
-    <mina1.version>1.1.7</mina1.version>
-    <netty3.version>3.2.10.Final</netty3.version>
-    <netty4.version>4.1.123.Final</netty4.version>
+    <netty.version>4.1.124.Final</netty.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <protobuf.version>3.25.5</protobuf.version>
     <slf4j.version>1.7.26</slf4j.version>
@@ -51,18 +49,15 @@
       </dependency>
       <dependency>
         <groupId>io.netty</groupId>
-        <artifactId>netty-all</artifactId>
-        <version>${netty4.version}</version>
+        <artifactId>netty-bom</artifactId>
+        <scope>import</scope>
+        <type>pom</type>
+        <version>${netty.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
         <version>3.18.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jboss.netty</groupId>
-        <artifactId>netty</artifactId>
-        <version>${netty3.version}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>

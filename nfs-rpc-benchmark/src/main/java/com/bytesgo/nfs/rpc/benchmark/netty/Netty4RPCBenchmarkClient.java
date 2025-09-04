@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.benchmark.netty4;
+package com.bytesgo.nfs.rpc.benchmark.netty;
 
 /**
  * nfs-rpc Apache License

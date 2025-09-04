@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.benchmark.netty4;
+package com.bytesgo.nfs.rpc.benchmark.netty;
 
 import com.bytesgo.nfs.rpc.benchmark.AbstractSimpleProcessorBenchmarkClient;
 import com.bytesgo.nfs.rpc.codec.Codecs;

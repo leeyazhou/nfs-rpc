@@ -7,8 +7,10 @@
     <version>1.0.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>nfs-rpc-mina2</artifactId>
+  <artifactId>nfs-rpc-netty</artifactId>
   <packaging>jar</packaging>
+
+  <name>nfs-rpc-netty</name>
 
   <dependencies>
     <dependency>
@@ -17,14 +19,8 @@
       <version>${project.parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.mina</groupId>
-      <artifactId>mina-core</artifactId>
-      <version>2.2.4</version>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-all</artifactId>
     </dependency>
   </dependencies>
 </project>

@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.benchmark.mina2;
+package com.bytesgo.nfs.rpc.benchmark.mina;
 
 /**
  * nfs-rpc Apache License
