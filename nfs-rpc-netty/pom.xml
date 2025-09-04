@@ -10,7 +10,7 @@
   <artifactId>nfs-rpc-netty</artifactId>
   <packaging>jar</packaging>
 
-  <name>nfs-rpc-netty</name>
+  <name>NFS RPC Netty</name>
 
   <dependencies>
     <dependency>
