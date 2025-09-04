@@ -12,11 +12,17 @@ public interface ServerHandler {
 
 	/**
 	 * register business handler,provide for Server
+	 * 
+	 * @param instanceName instanceName
+	 * @param instance     instance
 	 */
 	void registerProcessor(String instanceName, Object instance);
 
 	/**
 	 * handle the request
+	 * 
+	 * @param request request
+	 * @return response
 	 */
 	ResponseMessage handleRequest(final RequestMessage request);
 

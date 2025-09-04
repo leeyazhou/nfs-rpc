@@ -45,6 +45,7 @@ public class ServerConfig {
 
 	/**
 	 * @param maxPoolSize the maxPoolSize to set
+	 * @return ServerConfig
 	 */
 	public ServerConfig setMaxPoolSize(int maxPoolSize) {
 		this.maxPoolSize = maxPoolSize;

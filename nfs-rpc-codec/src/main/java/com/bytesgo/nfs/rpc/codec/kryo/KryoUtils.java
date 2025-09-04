@@ -37,9 +37,9 @@ public class KryoUtils {
   }
 
   /**
-   * @param className
-   * @param serializer
-   * @param id
+   * @param className className
+   * @param serializer serializer
+   * @param id id
    */
   @SuppressWarnings("rawtypes")
   public static synchronized void registerClass(Class className, Serializer serializer, int id) {
@@ -48,9 +48,6 @@ public class KryoUtils {
     idList.add(id);
   }
 
-  /**
-   * @return
-   */
   public static Kryo getKryo() {
     return kryos.get();
   }

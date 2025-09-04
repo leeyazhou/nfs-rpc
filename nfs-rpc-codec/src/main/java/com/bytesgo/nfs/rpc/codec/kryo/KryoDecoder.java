@@ -10,19 +10,19 @@ import com.esotericsoftware.kryo.io.Input;
  * @author <a href="mailto:jlusdy@gmail.com">jlusdy</a>
  */
 public class KryoDecoder implements Decoder {
-  /**
-   * @param className
-   * @param bytes
-   * @return
-   * @throws Exception
-   */
-  @Override
-  public Object decode(String className, byte[] bytes) throws CodecException {
-    Input input = new Input(bytes);
-    try {
-      return KryoUtils.getKryo().readClassAndObject(input);
-    } finally {
-      input.close();
-    }
-  }
+	/**
+	 * @param className className
+	 * @param bytes     bytes
+	 * @return Object
+	 * @throws CodecException CodecException
+	 */
+	@Override
+	public Object decode(String className, byte[] bytes) throws CodecException {
+		Input input = new Input(bytes);
+		try {
+			return KryoUtils.getKryo().readClassAndObject(input);
+		} finally {
+			input.close();
+		}
+	}
 }

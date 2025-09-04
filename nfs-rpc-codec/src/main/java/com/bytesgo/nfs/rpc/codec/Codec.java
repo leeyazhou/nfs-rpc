@@ -5,7 +5,6 @@ package com.bytesgo.nfs.rpc.codec;
 
 /**
  * @author leeyazhou
- *
  */
 public interface Codec {
 

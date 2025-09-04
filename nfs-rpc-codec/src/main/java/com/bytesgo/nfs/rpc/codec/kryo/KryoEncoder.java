@@ -10,20 +10,20 @@ import com.esotericsoftware.kryo.io.Output;
  * @author <a href="mailto:jlusdy@gmail.com">jlusdy</a>
  */
 public class KryoEncoder implements Encoder {
-  /**
-   * @param object
-   * @return
-   * @throws Exception
-   */
-  @Override
-  public byte[] encode(Object object) throws CodecException {
-    Output output = new Output(256);
-    KryoUtils.getKryo().writeClassAndObject(output, object);
-    try {
-      return output.toBytes();
-    } finally {
-      output.close();
-    }
-  }
+	/**
+	 * @param object object
+	 * @return byte[]
+	 * @throws CodecException CodecException
+	 */
+	@Override
+	public byte[] encode(Object object) throws CodecException {
+		Output output = new Output(256);
+		KryoUtils.getKryo().writeClassAndObject(output, object);
+		try {
+			return output.toBytes();
+		} finally {
+			output.close();
+		}
+	}
 
 }

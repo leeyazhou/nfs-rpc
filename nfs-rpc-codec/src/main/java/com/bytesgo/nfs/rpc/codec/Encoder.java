@@ -8,13 +8,17 @@ package com.bytesgo.nfs.rpc.codec;
 /**
  * Encoder Interface
  * 
- * @author <a href="mailto:bluedavy@gmail.com">bluedavy</a>
+ * @author leeyazhou
  */
 public interface Encoder {
 
-  /**
-   * Encode Object to byte[]
-   */
-   byte[] encode(Object object) throws CodecException;
+	/**
+	 * Encode Object to byte[]
+	 * 
+	 * @param object data
+	 * @return bytes
+	 * @throws CodecException CodecException
+	 */
+	byte[] encode(Object object) throws CodecException;
 
 }

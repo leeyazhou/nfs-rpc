@@ -15,9 +15,9 @@ public interface ServerProcessor {
 	/**
 	 * Handle request,then return Object
 	 * 
-	 * @param request
-	 * @return Object
-	 * @throws Exception
+	 * @param request request
+	 * @return Object obj
+	 * @throws Exception ex
 	 */
 	Object handle(Object request) throws Exception;
 

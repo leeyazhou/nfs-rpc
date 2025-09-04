@@ -6,9 +6,9 @@ import com.bytesgo.nfs.rpc.codec.kryo.KryoCodec;
 import com.bytesgo.nfs.rpc.codec.protobuf.ProtobufCodec;
 
 /**
- * Encoder & Decoder Register
+ * Encoder and Decoder Register
  * 
- * @author <a href="mailto:bluedavy@gmail.com">bluedavy</a>
+ * @author leeyazhou
  */
 public class Codecs {
 
@@ -19,7 +19,7 @@ public class Codecs {
 	public static final int PB_CODEC = 3;
 
 	public static final int KRYO_CODEC = 4;
-	
+
 	private static Codec[] codecs = new Codec[5];
 
 	static {

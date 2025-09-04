@@ -12,9 +12,14 @@ package com.bytesgo.nfs.rpc.codec;
  */
 public interface Decoder {
 
-  /**
-   * decode byte[] to Object
-   */
-   Object decode(String className, byte[] bytes) throws CodecException;
+	/**
+	 * decode byte[] to Object
+	 * 
+	 * @param className className
+	 * @param bytes     bytes
+	 * @return obj
+	 * @throws CodecException CodecException
+	 */
+	Object decode(String className, byte[] bytes) throws CodecException;
 
 }
