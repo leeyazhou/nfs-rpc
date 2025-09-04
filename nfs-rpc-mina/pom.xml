@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.bytesgo.nfs.rpc</groupId>
     <artifactId>nfs-rpc-parent</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
   </parent>
 
   <artifactId>nfs-rpc-mina</artifactId>
