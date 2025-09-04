@@ -7,6 +7,9 @@
     <version>1.0.1</version>
   </parent>
   <artifactId>nfs-rpc-benchmark</artifactId>
+  <properties>
+  	<skipPublishing>true</skipPublishing>
+  </properties>
 
   <dependencies>
     <dependency>
