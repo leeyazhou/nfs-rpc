@@ -1,4 +1,5 @@
-
+.flattened-pom.xml
+.vscode/
 
 # Created by https://www.toptal.com/developers/gitignore/api/java,macos,maven,windows,eclipse,intellij+all
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,macos,maven,windows,eclipse,intellij+all

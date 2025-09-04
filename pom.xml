@@ -8,7 +8,7 @@
   </parent>
   <groupId>com.bytesgo.nfs.rpc</groupId>
   <artifactId>nfs-rpc-parent</artifactId>
-  <version>1.0.1</version>
+  <version>${revision}</version>
   <packaging>pom</packaging>
   <name>NFS RPC Parent</name>
   <inceptionYear>2012</inceptionYear>
@@ -32,6 +32,7 @@
     <netty.version>4.1.124.Final</netty.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <protobuf.version>3.25.5</protobuf.version>
+    <revision>1.0.2-SNAPSHOT</revision>
     <slf4j.version>1.7.26</slf4j.version>
   </properties>
   <dependencyManagement>
@@ -42,6 +43,36 @@
         <version>${netty.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.bytesgo.nfs.rpc</groupId>
+        <artifactId>nfs-rpc-benchmark</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.bytesgo.nfs.rpc</groupId>
+        <artifactId>nfs-rpc-codec</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.bytesgo.nfs.rpc</groupId>
+        <artifactId>nfs-rpc-core</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.bytesgo.nfs.rpc</groupId>
+        <artifactId>nfs-rpc-grizzly</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.bytesgo.nfs.rpc</groupId>
+        <artifactId>nfs-rpc-mina</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.bytesgo.nfs.rpc</groupId>
+        <artifactId>nfs-rpc-netty</artifactId>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>com.caucho</groupId>
@@ -98,6 +129,36 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>1.7.2</version>
+        <configuration>
+          <updatePomFile>true</updatePomFile>
+          <flattenMode>resolveCiFriendliesOnly</flattenMode>
+        </configuration>
+        <executions>
+          <execution>
+            <id>flatten</id>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+            <phase>process-resources</phase>
+          </execution>
+          <execution>
+            <id>flatten.clean</id>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <phase>clean</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
   <profiles>
     <profile>
       <id>release-nfs</id>

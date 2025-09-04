@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.bytesgo.nfs.rpc</groupId>
     <artifactId>nfs-rpc-parent</artifactId>
-    <version>1.0.1</version>
+    <version>${revision}</version>
   </parent>
 
   <artifactId>nfs-rpc-netty</artifactId>
@@ -16,7 +16,6 @@
     <dependency>
       <groupId>com.bytesgo.nfs.rpc</groupId>
       <artifactId>nfs-rpc-core</artifactId>
-      <version>${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>io.netty</groupId>

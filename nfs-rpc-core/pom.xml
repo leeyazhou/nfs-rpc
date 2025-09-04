@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.bytesgo.nfs.rpc</groupId>
     <artifactId>nfs-rpc-parent</artifactId>
-    <version>1.0.1</version>
+    <version>${revision}</version>
   </parent>
 
   <artifactId>nfs-rpc-core</artifactId>
@@ -14,7 +14,6 @@
     <dependency>
       <groupId>com.bytesgo.nfs.rpc</groupId>
       <artifactId>nfs-rpc-codec</artifactId>
-      <version>${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
