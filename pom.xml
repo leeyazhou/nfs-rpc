@@ -14,9 +14,7 @@
   <modules>
     <module>nfs-rpc-core</module>
     <module>nfs-rpc-grizzly</module>
-    <module>nfs-rpc-mina</module>
     <module>nfs-rpc-mina2</module>
-    <module>nfs-rpc-netty</module>
     <module>nfs-rpc-netty4</module>
     <module>nfs-rpc-benchmark</module>
     <module>nfs-rpc-codec</module>

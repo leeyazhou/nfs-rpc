@@ -16,17 +16,7 @@
     </dependency>
     <dependency>
       <groupId>com.bytesgo.nfs.rpc</groupId>
-      <artifactId>nfs-rpc-mina</artifactId>
-      <version>${project.parent.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.bytesgo.nfs.rpc</groupId>
       <artifactId>nfs-rpc-mina2</artifactId>
-      <version>${project.parent.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.bytesgo.nfs.rpc</groupId>
-      <artifactId>nfs-rpc-netty</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
     <dependency>
