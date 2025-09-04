@@ -100,7 +100,7 @@
   </dependencies>
   <profiles>
     <profile>
-      <id>release</id>
+      <id>release-nfs</id>
       <build>
         <plugins>
           <plugin>
