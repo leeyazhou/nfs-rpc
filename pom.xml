@@ -28,7 +28,7 @@
     <junit.jupiter.api.version>5.12.2</junit.jupiter.api.version>
     <junit.version>4.13.1</junit.version>
     <kryo.version>4.0.0</kryo.version>
-    <mina.version>2.2.4</mina.version>
+    <mina.version>2.2.6</mina.version>
     <netty.version>4.1.124.Final</netty.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <protobuf.version>3.25.5</protobuf.version>
