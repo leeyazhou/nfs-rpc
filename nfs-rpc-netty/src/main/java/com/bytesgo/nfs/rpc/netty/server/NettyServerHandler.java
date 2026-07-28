@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.netty4.server;
+package com.bytesgo.nfs.rpc.netty.server;
 
 /**
  * nfs-rpc Apache License
@@ -26,9 +26,9 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * 
  * @author <a href="mailto:coderplay@gmail.com">Min Zhou</a>
  */
-public class Netty4ServerHandler extends SimpleChannelInboundHandler<RequestMessage> {
+public class NettyServerHandler extends SimpleChannelInboundHandler<RequestMessage> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Netty4ServerHandler.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NettyServerHandler.class);
 
   /**
    * Calls {@link ChannelHandlerContext#fireExceptionCaught(Throwable)} to

@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.netty4.protocol;
+package com.bytesgo.nfs.rpc.netty.protocol;
 
 import com.bytesgo.nfs.rpc.core.protocol.ByteBufferWrapper;
 
@@ -14,11 +14,11 @@ import io.netty.buffer.ByteBuf;
  * 
  * @author <a href="mailto:coderplay@gmail.com">Min Zhou</a>
  */
-public class Netty4ByteBufferWrapper implements ByteBufferWrapper {
+public class NettyByteBufferWrapper implements ByteBufferWrapper {
 
   private ByteBuf buffer;
 
-  public Netty4ByteBufferWrapper(ByteBuf in) {
+  public NettyByteBufferWrapper(ByteBuf in) {
     buffer = in;
   }
 

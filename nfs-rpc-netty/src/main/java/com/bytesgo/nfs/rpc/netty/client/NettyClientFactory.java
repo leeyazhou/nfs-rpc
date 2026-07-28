@@ -1,12 +1,12 @@
-package com.bytesgo.nfs.rpc.netty4.client;
+package com.bytesgo.nfs.rpc.netty.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bytesgo.nfs.rpc.core.client.AbstractClientFactory;
 import com.bytesgo.nfs.rpc.core.client.Client;
-import com.bytesgo.nfs.rpc.netty4.protocol.Netty4ProtocolDecoder;
-import com.bytesgo.nfs.rpc.netty4.protocol.Netty4ProtocolEncoder;
+import com.bytesgo.nfs.rpc.netty.protocol.NettyProtocolDecoder;
+import com.bytesgo.nfs.rpc.netty.protocol.NettyProtocolEncoder;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -22,13 +22,13 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  * 
  * @author <a href="mailto:coderplay@gmail.com">Min Zhou</a>
  */
-public class Netty4ClientFactory extends AbstractClientFactory {
+public class NettyClientFactory extends AbstractClientFactory {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Netty4ClientFactory.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NettyClientFactory.class);
 
-  private static AbstractClientFactory _self = new Netty4ClientFactory();
+  private static AbstractClientFactory _self = new NettyClientFactory();
 
-  private Netty4ClientFactory() {
+  private NettyClientFactory() {
   }
 
   public static AbstractClientFactory getInstance() {
@@ -36,7 +36,7 @@ public class Netty4ClientFactory extends AbstractClientFactory {
   }
 
   protected Client createClient(String targetIP, int targetPort, int connectTimeout, String key) throws Exception {
-    final Netty4ClientHandler handler = new Netty4ClientHandler(this, key);
+    final NettyClientHandler handler = new NettyClientHandler(this, key);
 
     EventLoopGroup group = new NioEventLoopGroup(1);
     Bootstrap b = new Bootstrap();
@@ -47,8 +47,8 @@ public class Netty4ClientFactory extends AbstractClientFactory {
         .handler(new ChannelInitializer<SocketChannel>() {
           @Override
           public void initChannel(SocketChannel ch) throws Exception {
-            ch.pipeline().addLast("decoder", new Netty4ProtocolDecoder());
-            ch.pipeline().addLast("encoder", new Netty4ProtocolEncoder());
+            ch.pipeline().addLast("decoder", new NettyProtocolDecoder());
+            ch.pipeline().addLast("encoder", new NettyProtocolEncoder());
             ch.pipeline().addLast("handler", handler);
           }
         });
@@ -68,7 +68,7 @@ public class Netty4ClientFactory extends AbstractClientFactory {
       LOGGER.error("Create connection to " + targetIP + ":" + targetPort + " error", future.cause());
       throw new Exception("Create connection to " + targetIP + ":" + targetPort + " error", future.cause());
     }
-    Netty4Client client = new Netty4Client(future, key, connectTimeout);
+    NettyClient client = new NettyClient(future, key, connectTimeout);
     handler.setClient(client);
     return client;
   }

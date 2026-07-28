@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.netty4.protocol;
+package com.bytesgo.nfs.rpc.netty.protocol;
 
 import java.util.List;
 
@@ -19,11 +19,11 @@ import io.netty.handler.codec.ByteToMessageDecoder;
  * 
  * @author <a href="mailto:coderplay@gmail.com">Min Zhou</a>
  */
-public class Netty4ProtocolDecoder extends ByteToMessageDecoder {
+public class NettyProtocolDecoder extends ByteToMessageDecoder {
 
   @Override
   protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-    Netty4ByteBufferWrapper wrapper = new Netty4ByteBufferWrapper(in);
+    NettyByteBufferWrapper wrapper = new NettyByteBufferWrapper(in);
     Object msg = ProtocolUtils.decode(wrapper, null);
     if (msg != null)
       out.add(msg);

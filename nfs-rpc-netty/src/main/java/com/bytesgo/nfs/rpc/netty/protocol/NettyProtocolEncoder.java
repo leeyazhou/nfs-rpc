@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.netty4.protocol;
+package com.bytesgo.nfs.rpc.netty.protocol;
 
 import com.bytesgo.nfs.rpc.core.protocol.ProtocolUtils;
 
@@ -16,11 +16,11 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * 
  * @author <a href="mailto:coderplay@gmail.com">Min Zhou</a>
  */
-public class Netty4ProtocolEncoder extends MessageToByteEncoder<Object> {
+public class NettyProtocolEncoder extends MessageToByteEncoder<Object> {
 
   @Override
   protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
-    Netty4ByteBufferWrapper byteBufferWrapper = new Netty4ByteBufferWrapper(out);
+    NettyByteBufferWrapper byteBufferWrapper = new NettyByteBufferWrapper(out);
     ProtocolUtils.encode(msg, byteBufferWrapper);
   }
 

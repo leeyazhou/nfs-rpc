@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.netty4.client;
+package com.bytesgo.nfs.rpc.netty.client;
 
 import java.net.InetSocketAddress;
 
@@ -19,9 +19,9 @@ import io.netty.channel.ChannelFutureListener;
  * 
  * @author <a href="mailto:coderplay@gmail.com">Min Zhou</a>
  */
-public class Netty4Client extends AbstractClient {
+public class NettyClient extends AbstractClient {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Netty4Client.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NettyClient.class);
 
   private ChannelFuture cf;
 
@@ -29,7 +29,7 @@ public class Netty4Client extends AbstractClient {
 
   private int connectTimeout;
 
-  public Netty4Client(ChannelFuture cf, String key, int connectTimeout) {
+  public NettyClient(ChannelFuture cf, String key, int connectTimeout) {
     this.cf = cf;
     this.key = key;
     this.connectTimeout = connectTimeout;
@@ -59,7 +59,7 @@ public class Netty4Client extends AbstractClient {
             // maybe some exception,so close the channel
             cf.channel().close();
           } else {
-            Netty4ClientFactory.getInstance().removeClient(key, self);
+            NettyClientFactory.getInstance().removeClient(key, self);
           }
           errorMsg = "Send request to " + cf.channel().toString() + " error" + future.cause();
         }
@@ -89,7 +89,7 @@ public class Netty4Client extends AbstractClient {
   }
 
   public ClientFactory getClientFactory() {
-    return Netty4ClientFactory.getInstance();
+    return NettyClientFactory.getInstance();
   }
 
 }

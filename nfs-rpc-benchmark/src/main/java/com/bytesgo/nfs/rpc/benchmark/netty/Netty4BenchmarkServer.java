@@ -23,7 +23,7 @@ import com.bytesgo.nfs.rpc.core.protocol.SimpleProcessorProtocol;
 import com.bytesgo.nfs.rpc.core.server.Server;
 import com.bytesgo.nfs.rpc.core.server.ServerConfig;
 import com.bytesgo.nfs.rpc.core.server.ServerProcessor;
-import com.bytesgo.nfs.rpc.netty4.server.Netty4Server;
+import com.bytesgo.nfs.rpc.netty.server.NettyServer;
 import com.esotericsoftware.kryo.serializers.DefaultArraySerializers;
 import com.google.protobuf.ByteString;
 
@@ -85,7 +85,7 @@ public class Netty4BenchmarkServer extends AbstractBenchmarkServer {
 	}
 
 	public Server getServer(ServerConfig serverConfig) {
-		return new Netty4Server(serverConfig);
+		return new NettyServer(serverConfig);
 	}
 
 }

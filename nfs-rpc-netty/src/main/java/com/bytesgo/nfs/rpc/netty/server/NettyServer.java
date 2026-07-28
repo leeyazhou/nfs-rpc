@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.netty4.server;
+package com.bytesgo.nfs.rpc.netty.server;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import com.bytesgo.nfs.rpc.core.protocol.ProtocolFactory;
 import com.bytesgo.nfs.rpc.core.server.Server;
 import com.bytesgo.nfs.rpc.core.server.ServerConfig;
-import com.bytesgo.nfs.rpc.netty4.protocol.Netty4ProtocolDecoder;
-import com.bytesgo.nfs.rpc.netty4.protocol.Netty4ProtocolEncoder;
+import com.bytesgo.nfs.rpc.netty.protocol.NettyProtocolDecoder;
+import com.bytesgo.nfs.rpc.netty.protocol.NettyProtocolEncoder;
 
 /**
  * nfs-rpc Apache License
@@ -31,9 +31,9 @@ import io.netty.util.concurrent.EventExecutorGroup;
  * 
  * @author <a href="mailto:coderplay@gmail.com">Min Zhou</a>
  */
-public class Netty4Server implements Server {
+public class NettyServer implements Server {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Netty4Server.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(NettyServer.class);
 	private AtomicBoolean startFlag = new AtomicBoolean(false);
 
 	private NioEventLoopGroup bossGroup;
@@ -41,7 +41,7 @@ public class Netty4Server implements Server {
 	private EventExecutorGroup businessGroup;
 	private ServerConfig serverConfig;
 
-	public Netty4Server(ServerConfig serverConfig) {
+	public NettyServer(ServerConfig serverConfig) {
 		this.serverConfig = serverConfig;
 	}
 
@@ -63,9 +63,9 @@ public class Netty4Server implements Server {
 				.childHandler(new ChannelInitializer<SocketChannel>() {
 					@Override
 					public void initChannel(SocketChannel ch) throws Exception {
-						ch.pipeline().addLast("decoder", new Netty4ProtocolDecoder());
-						ch.pipeline().addLast("encoder", new Netty4ProtocolEncoder());
-						ch.pipeline().addLast(businessGroup, "handler", new Netty4ServerHandler());
+						ch.pipeline().addLast("decoder", new NettyProtocolDecoder());
+						ch.pipeline().addLast("encoder", new NettyProtocolEncoder());
+						ch.pipeline().addLast(businessGroup, "handler", new NettyServerHandler());
 					}
 				});
 		b.bind(new InetSocketAddress(serverConfig.getHost(), serverConfig.getPort())).sync();

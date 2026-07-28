@@ -1,4 +1,4 @@
-package com.bytesgo.nfs.rpc.netty4.client;
+package com.bytesgo.nfs.rpc.netty.client;
 
 import java.io.IOException;
 
@@ -20,24 +20,24 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * 
  * @author <a href="mailto:coderplay@gmail.com">Min Zhou</a>
  */
-public class Netty4ClientHandler extends SimpleChannelInboundHandler<ResponseMessage> {
+public class NettyClientHandler extends SimpleChannelInboundHandler<ResponseMessage> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(Netty4ClientHandler.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(NettyClientHandler.class);
 
   private static final boolean isDebugEnabled = LOGGER.isDebugEnabled();
 
-  private Netty4ClientFactory factory;
+  private NettyClientFactory factory;
 
   private String key;
 
-  private Netty4Client client;
+  private NettyClient client;
 
-  public Netty4ClientHandler(Netty4ClientFactory factory, String key) {
+  public NettyClientHandler(NettyClientFactory factory, String key) {
     this.factory = factory;
     this.key = key;
   }
 
-  public void setClient(Netty4Client client) {
+  public void setClient(NettyClient client) {
     this.client = client;
   }
 

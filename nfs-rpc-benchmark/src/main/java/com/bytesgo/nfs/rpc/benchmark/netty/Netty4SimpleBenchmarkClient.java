@@ -3,7 +3,7 @@ package com.bytesgo.nfs.rpc.benchmark.netty;
 import com.bytesgo.nfs.rpc.benchmark.AbstractSimpleProcessorBenchmarkClient;
 import com.bytesgo.nfs.rpc.codec.Codecs;
 import com.bytesgo.nfs.rpc.core.client.ClientFactory;
-import com.bytesgo.nfs.rpc.netty4.client.Netty4ClientFactory;
+import com.bytesgo.nfs.rpc.netty.client.NettyClientFactory;
 
 /**
  * Netty4 Direct Call RPC Benchmark Client
@@ -27,7 +27,7 @@ public class Netty4SimpleBenchmarkClient extends AbstractSimpleProcessorBenchmar
   }
 
   public ClientFactory getClientFactory() {
-    return Netty4ClientFactory.getInstance();
+    return NettyClientFactory.getInstance();
   }
 
 }
