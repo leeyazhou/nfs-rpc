@@ -19,6 +19,7 @@
     <module>nfs-rpc-netty</module>
     <module>nfs-rpc-benchmark</module>
     <module>nfs-rpc-codec</module>
+    <module>nfs-rpc-micrometer</module>
   </modules>
   <properties>
     <assertj.version>3.26.3</assertj.version>
@@ -28,6 +29,7 @@
     <jdk.version>1.8</jdk.version>
     <junit.jupiter.version>5.14.4</junit.jupiter.version>
     <kryo.version>4.0.3</kryo.version>
+    <micrometer.version>1.17.0</micrometer.version>
     <mina.version>2.2.9</mina.version>
     <netty.version>4.2.16.Final</netty.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -66,6 +68,11 @@
       </dependency>
       <dependency>
         <groupId>com.bytesgo.nfs.rpc</groupId>
+        <artifactId>nfs-rpc-micrometer</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.bytesgo.nfs.rpc</groupId>
         <artifactId>nfs-rpc-mina</artifactId>
         <version>${revision}</version>
       </dependency>
@@ -88,6 +95,11 @@
         <groupId>com.google.protobuf</groupId>
         <artifactId>protobuf-java</artifactId>
         <version>${protobuf.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-core</artifactId>
+        <version>${micrometer.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
