@@ -17,6 +17,8 @@ import com.bytesgo.nfs.rpc.codec.Codecs;
 import com.bytesgo.nfs.rpc.core.metrics.RpcMetricsHolder;
 import com.bytesgo.nfs.rpc.core.message.RequestMessage;
 import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
+import com.bytesgo.nfs.rpc.core.tracing.RpcTracerHolder;
+import com.bytesgo.nfs.rpc.core.tracing.Span;
 
 /**
  * Reflection RPC Server Handler
@@ -56,6 +58,9 @@ public class RPCServerHandler implements ServerHandler {
     ResponseMessage responseWrapper = new ResponseMessage(request.getId(), request.getCodecType(), request.getProtocolType());
     String targetInstanceName = new String(request.getTargetInstanceName());
     String methodName = new String(request.getMethodName());
+    Span span = RpcTracerHolder.get().startServerSpan(
+        targetInstanceName + "." + methodName, "local", request.getHeaders());
+    Throwable spanError = null;
     byte[][] argTypeBytes = request.getArgTypes();
     String[] argTypes = new String[argTypeBytes.length];
     for (int i = 0; i < argTypeBytes.length; i++) {
@@ -99,9 +104,14 @@ public class RPCServerHandler implements ServerHandler {
       }
       responseWrapper.setResponse(method.invoke(processor, requestObjects));
     } catch (Exception e) {
+      spanError = e;
       LOGGER.error("server handle request error", e);
       responseWrapper.setException(e);
     } finally {
+      if (spanError != null) {
+        span.setError(spanError);
+      }
+      span.finish();
       RpcMetricsHolder.get().recordCall(
           targetInstanceName + "." + methodName,
           "local",

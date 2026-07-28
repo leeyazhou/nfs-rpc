@@ -6,7 +6,9 @@ package com.bytesgo.nfs.rpc.core.client;
  * http://code.google.com/p/nfs-rpc (c) 2011
  */
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,6 +31,8 @@ import com.bytesgo.nfs.rpc.core.exception.RpcTimeoutException;
 import com.bytesgo.nfs.rpc.core.metrics.RpcMetricsHolder;
 import com.bytesgo.nfs.rpc.core.message.RequestMessage;
 import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
+import com.bytesgo.nfs.rpc.core.tracing.RpcTracerHolder;
+import com.bytesgo.nfs.rpc.core.tracing.Span;
 
 /**
  * Common Client,support sync invoke
@@ -104,7 +108,18 @@ public abstract class AbstractClient implements Client {
 		long startTimeNanos = System.nanoTime();
 		boolean success = false;
 		String serverAddress = getServerIP() + ":" + getServerPort();
+		String operationName = "invokeSync";
+		if (message.getMethodName() != null) {
+			operationName = new String(message.getMethodName(), StandardCharsets.UTF_8);
+		}
+		Span span = RpcTracerHolder.get().startClientSpan(operationName, serverAddress);
+		Throwable spanError = null;
 		try {
+			Map<String, String> headers = new HashMap<>();
+			RpcTracerHolder.get().inject(span, headers);
+			if (!headers.isEmpty()) {
+				message.setHeaders(headers);
+			}
 		long beginTime = System.currentTimeMillis();
 		RpcResult rpcResult = new RpcResult();
 		responseCache.put(message.getId(), rpcResult);
@@ -199,7 +214,14 @@ public abstract class AbstractClient implements Client {
 		}
 		success = true;
 		return responseWrapper.getResponse();
+		} catch (Throwable t) {
+			spanError = t;
+			throw t;
 		} finally {
+			if (spanError != null) {
+				span.setError(spanError);
+			}
+			span.finish();
 			RpcMetricsHolder.get().recordCall("invokeSync", serverAddress,
 					System.nanoTime() - startTimeNanos, success);
 			MDC.clear();

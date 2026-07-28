@@ -7,7 +7,9 @@ package com.bytesgo.nfs.rpc.core.protocol;
  */
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,15 +87,31 @@ public class RPCProtocol implements Protocol {
         byte[] methodNameByte = request.getMethodName();
         id = request.getId();
         int timeout = request.getTimeout();
+        Map<String, String> headers = request.getHeaders();
+        boolean hasHeaders = headers != null && !headers.isEmpty();
+        List<byte[]> headerKeys = new ArrayList<byte[]>();
+        List<byte[]> headerVals = new ArrayList<byte[]>();
+        int headersSectionLen = 0;
+        if (hasHeaders) {
+          headersSectionLen += 4;
+          for (Map.Entry<String, String> entry : headers.entrySet()) {
+            byte[] keyBytes = entry.getKey().getBytes(StandardCharsets.UTF_8);
+            byte[] valBytes = entry.getValue() == null ? new byte[0]
+                : entry.getValue().getBytes(StandardCharsets.UTF_8);
+            headerKeys.add(keyBytes);
+            headerVals.add(valBytes);
+            headersSectionLen += 4 + keyBytes.length + 4 + valBytes.length;
+          }
+        }
         int capacity = ProtocolUtils.HEADER_LEN + REQUEST_HEADER_LEN + requestArgs.size() * 4 * 2 + targetInstanceNameByte.length
-            + methodNameByte.length + requestArgTypesLen + requestArgsLen;
+            + methodNameByte.length + requestArgTypesLen + requestArgsLen + headersSectionLen;
         ByteBufferWrapper byteBuffer = bytebufferWrapper.get(capacity);
         byteBuffer.writeByte(ProtocolUtils.CURRENT_VERSION);
         byteBuffer.writeByte((byte) TYPE);
         byteBuffer.writeByte(VERSION);
         byteBuffer.writeByte(type);
         byteBuffer.writeByte((byte) request.getCodecType());
-        byteBuffer.writeByte((byte) 0);
+        byteBuffer.writeByte((byte) (hasHeaders ? 1 : 0));
         byteBuffer.writeByte((byte) 0);
         byteBuffer.writeByte((byte) 0);
         byteBuffer.writeInt(id);
@@ -114,6 +132,15 @@ public class RPCProtocol implements Protocol {
         }
         for (byte[] requestArg : requestArgs) {
           byteBuffer.writeBytes(requestArg);
+        }
+        if (hasHeaders) {
+          byteBuffer.writeInt(headerKeys.size());
+          for (int i = 0; i < headerKeys.size(); i++) {
+            byteBuffer.writeInt(headerKeys.get(i).length);
+            byteBuffer.writeInt(headerVals.get(i).length);
+            byteBuffer.writeBytes(headerKeys.get(i));
+            byteBuffer.writeBytes(headerVals.get(i));
+          }
         }
         return byteBuffer;
       } catch (Exception e) {
@@ -182,7 +209,7 @@ public class RPCProtocol implements Protocol {
           return errorObject;
         }
         int codecType = wrapper.readByte();
-        wrapper.readByte();
+        byte hasHeadersFlag = wrapper.readByte();
         wrapper.readByte();
         wrapper.readByte();
         int requestId = wrapper.readInt();
@@ -230,6 +257,44 @@ public class RPCProtocol implements Protocol {
         RequestMessage requestWrapper = new RequestMessage(targetInstanceByte, methodNameByte, argTypes, args, timeout, requestId,
             codecType, TYPE);
         int messageLen = ProtocolUtils.HEADER_LEN + REQUEST_HEADER_LEN + expectedLenInfoLen + expectedLen;
+        Map<String, String> headers = null;
+        if (hasHeadersFlag == 1) {
+          if (wrapper.readableBytes() < 4) {
+            wrapper.setReaderIndex(originPos);
+            return errorObject;
+          }
+          int headersCount = wrapper.readInt();
+          int headersDataLen = 4;
+          if (headersCount < 0) {
+            throw new ProtocolException("invalid headers count: " + headersCount);
+          }
+          if (wrapper.readableBytes() < headersCount * 8) {
+            wrapper.setReaderIndex(originPos);
+            return errorObject;
+          }
+          int[] headerKeyLens = new int[headersCount];
+          int[] headerValLens = new int[headersCount];
+          for (int i = 0; i < headersCount; i++) {
+            headerKeyLens[i] = wrapper.readInt();
+            headerValLens[i] = wrapper.readInt();
+            headersDataLen += 8 + headerKeyLens[i] + headerValLens[i];
+          }
+          if (wrapper.readableBytes() < headersDataLen - 4 - headersCount * 8) {
+            wrapper.setReaderIndex(originPos);
+            return errorObject;
+          }
+          headers = new HashMap<String, String>();
+          for (int i = 0; i < headersCount; i++) {
+            byte[] keyBytes = new byte[headerKeyLens[i]];
+            wrapper.readBytes(keyBytes);
+            byte[] valBytes = new byte[headerValLens[i]];
+            wrapper.readBytes(valBytes);
+            headers.put(new String(keyBytes, StandardCharsets.UTF_8),
+                new String(valBytes, StandardCharsets.UTF_8));
+          }
+          messageLen += headersDataLen;
+        }
+        requestWrapper.setHeaders(headers);
         requestWrapper.setMessageLen(messageLen);
         return requestWrapper;
       } else if (type == RESPONSE) {

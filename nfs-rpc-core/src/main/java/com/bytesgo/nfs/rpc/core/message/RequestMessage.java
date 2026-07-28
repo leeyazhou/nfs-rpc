@@ -1,5 +1,7 @@
 package com.bytesgo.nfs.rpc.core.message;
 
+import java.util.Map;
+
 /**
  * RequestWrapper
  * 
@@ -20,6 +22,8 @@ public class RequestMessage extends Message {
 	private int timeout = 0;
 
 	private int messageLen;
+
+	private Map<String, String> headers;
 
 	public RequestMessage(Object message, int timeout, int codecType, int protocolType) {
 		this(message, timeout, incId.incrementAndGet(), codecType, protocolType);
@@ -86,6 +90,15 @@ public class RequestMessage extends Message {
 
 	public byte[][] getArgTypes() {
 		return argTypes;
+	}
+
+	public Map<String, String> getHeaders() {
+		return headers;
+	}
+
+	public RequestMessage setHeaders(Map<String, String> headers) {
+		this.headers = headers;
+		return this;
 	}
 
 }
