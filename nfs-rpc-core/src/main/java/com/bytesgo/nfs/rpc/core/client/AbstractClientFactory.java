@@ -13,6 +13,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.bytesgo.nfs.rpc.core.exception.RpcRejectException;
+import com.bytesgo.nfs.rpc.core.metrics.RpcMetricsHolder;
 
 /**
  * Abstract Client Factory,create custom nums client
@@ -50,6 +51,7 @@ public abstract class AbstractClientFactory implements ClientFactory {
         List<Client> clientList = new CopyOnWriteArrayList<>();
         for (int i = 0; i < clientNums; i++) {
           clientList.add(createClient(targetIP, targetPort, connectTimeout, cacheKey));
+          RpcMetricsHolder.get().recordConnection(targetIP + ":" + targetPort, true);
         }
         return clientList;
       }
@@ -76,6 +78,7 @@ public abstract class AbstractClientFactory implements ClientFactory {
     try {
       List<Client> clientList = task.get();
       clientList.remove(client);
+      RpcMetricsHolder.get().recordConnection(key, false);
       if (clientList.isEmpty()) {
         clients.remove(key);
       }

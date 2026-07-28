@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import com.bytesgo.nfs.rpc.codec.Codecs;
 import com.bytesgo.nfs.rpc.core.exception.RpcDecodeException;
@@ -25,6 +26,7 @@ import com.bytesgo.nfs.rpc.core.exception.RpcRejectException;
 import com.bytesgo.nfs.rpc.core.exception.RpcRemoteException;
 import com.bytesgo.nfs.rpc.core.exception.RpcSendException;
 import com.bytesgo.nfs.rpc.core.exception.RpcTimeoutException;
+import com.bytesgo.nfs.rpc.core.metrics.RpcMetricsHolder;
 import com.bytesgo.nfs.rpc.core.message.RequestMessage;
 import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
@@ -98,6 +100,11 @@ public abstract class AbstractClient implements Client {
 	}
 
 	private Object invokeSyncIntern(RequestMessage message) throws Exception {
+		MDC.put("rpcId", String.valueOf(message.getId()));
+		long startTimeNanos = System.nanoTime();
+		boolean success = false;
+		String serverAddress = getServerIP() + ":" + getServerPort();
+		try {
 		long beginTime = System.currentTimeMillis();
 		RpcResult rpcResult = new RpcResult();
 		responseCache.put(message.getId(), rpcResult);
@@ -190,7 +197,13 @@ public abstract class AbstractClient implements Client {
 			LOGGER.error(errorMsg, t);
 			throw new RpcRemoteException(errorMsg, t, getServerIP() + ":" + getServerPort(), message.getId());
 		}
+		success = true;
 		return responseWrapper.getResponse();
+		} finally {
+			RpcMetricsHolder.get().recordCall("invokeSync", serverAddress,
+					System.nanoTime() - startTimeNanos, success);
+			MDC.clear();
+		}
 	}
 
 	/**

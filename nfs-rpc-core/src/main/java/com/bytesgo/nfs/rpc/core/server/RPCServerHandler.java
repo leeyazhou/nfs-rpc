@@ -11,8 +11,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import com.bytesgo.nfs.rpc.codec.Codecs;
+import com.bytesgo.nfs.rpc.core.metrics.RpcMetricsHolder;
 import com.bytesgo.nfs.rpc.core.message.RequestMessage;
 import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
@@ -48,6 +50,9 @@ public class RPCServerHandler implements ServerHandler {
   }
 
   public ResponseMessage handleRequest(final RequestMessage request) {
+    String rpcId = String.valueOf(request.getId());
+    MDC.put("rpcId", rpcId);
+    long startTime = System.nanoTime();
     ResponseMessage responseWrapper = new ResponseMessage(request.getId(), request.getCodecType(), request.getProtocolType());
     String targetInstanceName = new String(request.getTargetInstanceName());
     String methodName = new String(request.getMethodName());
@@ -96,6 +101,13 @@ public class RPCServerHandler implements ServerHandler {
     } catch (Exception e) {
       LOGGER.error("server handle request error", e);
       responseWrapper.setException(e);
+    } finally {
+      RpcMetricsHolder.get().recordCall(
+          targetInstanceName + "." + methodName,
+          "local",
+          System.nanoTime() - startTime,
+          !responseWrapper.isError());
+      MDC.clear();
     }
     return responseWrapper;
   }
