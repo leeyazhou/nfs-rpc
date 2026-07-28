@@ -5,6 +5,7 @@
  */
 package com.bytesgo.nfs.rpc.core.protocol;
 
+import com.bytesgo.nfs.rpc.core.exception.ProtocolException;
 import com.bytesgo.nfs.rpc.core.message.Message;
 
 /**

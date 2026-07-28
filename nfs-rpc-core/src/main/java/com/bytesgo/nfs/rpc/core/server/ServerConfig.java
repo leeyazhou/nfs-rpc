@@ -5,11 +5,16 @@ package com.bytesgo.nfs.rpc.core.server;
 
 import java.util.concurrent.ExecutorService;
 
+import com.bytesgo.nfs.rpc.core.exception.NFSException;
+
 /**
  * @author leeyazhou
  *
  */
 public class ServerConfig {
+
+	private static final int MIN_PORT = 1;
+	private static final int MAX_PORT = 65535;
 
 	private String host;
 	private int port;
@@ -57,6 +62,19 @@ public class ServerConfig {
 	 */
 	public int getMaxPoolSize() {
 		return maxPoolSize;
+	}
+
+	public ServerConfig validate() {
+		if (port < MIN_PORT || port > MAX_PORT) {
+			throw new NFSException("Invalid port: " + port + ", must be between " + MIN_PORT + " and " + MAX_PORT);
+		}
+		if (host != null && host.trim().isEmpty()) {
+			throw new NFSException("Host must not be blank if set");
+		}
+		if (maxPoolSize < 0) {
+			throw new NFSException("Invalid maxPoolSize: " + maxPoolSize + ", must be >= 0");
+		}
+		return this;
 	}
 
 }

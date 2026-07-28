@@ -6,6 +6,7 @@
 package com.bytesgo.nfs.rpc.core.client;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
@@ -39,6 +40,28 @@ public interface Client {
 	 * @throws Exception if some exception,then will be throwed
 	 */
 	Object invokeSync(Invocation invocation, int timeout, int codecType, int protocolType) throws Exception;
+
+	/**
+	 * invoke async via simple call
+	 *
+	 * @param message
+	 * @param timeout
+	 * @param codecType    serialize/deserialize type
+	 * @param protocolType
+	 * @return CompletableFuture that completes with the response or exceptionally with the error
+	 */
+	CompletableFuture<Object> invokeAsync(Object message, int timeout, int codecType, int protocolType);
+
+	/**
+	 * invoke async via rpc
+	 *
+	 * @param invocation   {@link Invocation}
+	 * @param timeout      rcp timeout
+	 * @param codecType    serialize/deserialize type
+	 * @param protocolType
+	 * @return CompletableFuture that completes with the response or exceptionally with the error
+	 */
+	CompletableFuture<Object> invokeAsync(Invocation invocation, int timeout, int codecType, int protocolType);
 
 	/**
 	 * receive response from server

@@ -5,6 +5,8 @@
  */
 package com.bytesgo.nfs.rpc.core.protocol;
 
+import com.bytesgo.nfs.rpc.core.exception.ProtocolException;
+
 /**
  * Protocol Interface,for custom network protocol
  * 

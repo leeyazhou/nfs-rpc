@@ -11,7 +11,6 @@ import java.net.InetSocketAddress;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Abstract Client Invocation Handler,help for client proxy
@@ -36,6 +35,8 @@ public abstract class AbstractClientInvocationHandler implements InvocationHandl
 	// timeout,other use *
 	private Map<String, Integer> methodTimeouts;
 
+	private LoadBalancer loadBalancer = new RandomLoadBalancer();
+
 	public AbstractClientInvocationHandler(List<InetSocketAddress> servers, int clientNums, int connectTimeout,
 			String targetInstanceName, Map<String, Integer> methodTimeouts, int codecType, int protocolType) {
 		this.servers = Collections.unmodifiableList(servers);
@@ -51,22 +52,23 @@ public abstract class AbstractClientInvocationHandler implements InvocationHandl
 		this.servers = Collections.unmodifiableList(servers);
 	}
 
-	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		InetSocketAddress server = null;
-		if (servers.size() == 1) {
-			server = servers.get(0);
-		} else {
-			// random is not thread-safe,so...
-			Random random = new Random();
-			server = servers.get(random.nextInt(servers.size()));
+	public void setLoadBalancer(LoadBalancer loadBalancer) {
+		if (loadBalancer == null) {
+			throw new IllegalArgumentException("loadBalancer must not be null");
 		}
+		this.loadBalancer = loadBalancer;
+	}
+
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		InetSocketAddress server = loadBalancer.select(servers);
 		Client client = getClientFactory().get(server.getAddress().getHostAddress(), server.getPort(), connectTimeout,
 				clientNums);
 		String methodName = method.getName();
 		String[] argTypes = createParamSignature(method.getParameterTypes());
 		int timeout = 0;
-		if (methodTimeouts.containsKey(methodName.toLowerCase())) {
-			timeout = methodTimeouts.get(methodName);
+		String lowerMethodName = methodName.toLowerCase();
+		if (methodTimeouts.containsKey(lowerMethodName)) {
+			timeout = methodTimeouts.get(lowerMethodName);
 		} else {
 			timeout = methodTimeouts.get("*");
 		}

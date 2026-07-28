@@ -5,6 +5,7 @@ package com.bytesgo.nfs.rpc.core.protocol;
  * 
  * http://code.google.com/p/nfs-rpc (c) 2011
  */
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bytesgo.nfs.rpc.codec.Codecs;
-import com.bytesgo.nfs.rpc.core.NFSException;
+import com.bytesgo.nfs.rpc.core.exception.NFSException;
+import com.bytesgo.nfs.rpc.core.exception.ProtocolException;
 import com.bytesgo.nfs.rpc.core.message.RequestMessage;
 import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
@@ -125,11 +127,11 @@ public class RPCProtocol implements Protocol {
       try {
         // no return object
         if (response.getResponse() != null) {
-          className = response.getResponse().getClass().getName().getBytes();
+          className = response.getResponse().getClass().getName().getBytes(StandardCharsets.UTF_8);
           body = Codecs.getCodec(response.getCodecType()).encode(response.getResponse());
         }
         if (response.isError()) {
-          className = response.getException().getClass().getName().getBytes();
+          className = response.getException().getClass().getName().getBytes(StandardCharsets.UTF_8);
           body = Codecs.getCodec(response.getCodecType()).encode(response.getException());
         }
         id = response.getId();
@@ -137,7 +139,7 @@ public class RPCProtocol implements Protocol {
         LOGGER.error("encode response object error", e);
         // still create responsewrapper,so client can get exception
         response.setResponse(new Exception("serialize response object error", e));
-        className = Exception.class.getName().getBytes();
+        className = Exception.class.getName().getBytes(StandardCharsets.UTF_8);
         body = Codecs.getCodec(response.getCodecType()).encode(response.getResponse());
       }
       type = RESPONSE;

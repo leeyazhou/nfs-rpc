@@ -1,7 +1,4 @@
-/**
- * 
- */
-package com.bytesgo.nfs.rpc.core;
+package com.bytesgo.nfs.rpc.core.exception;
 
 /**
  * @author leeyazhou

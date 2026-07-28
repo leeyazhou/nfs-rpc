@@ -5,14 +5,26 @@ package com.bytesgo.nfs.rpc.core.client;
  * 
  * http://code.google.com/p/nfs-rpc (c) 2011
  */
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bytesgo.nfs.rpc.codec.Codecs;
+import com.bytesgo.nfs.rpc.core.exception.RpcDecodeException;
+import com.bytesgo.nfs.rpc.core.exception.RpcRejectException;
+import com.bytesgo.nfs.rpc.core.exception.RpcRemoteException;
+import com.bytesgo.nfs.rpc.core.exception.RpcSendException;
+import com.bytesgo.nfs.rpc.core.exception.RpcTimeoutException;
 import com.bytesgo.nfs.rpc.core.message.RequestMessage;
 import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
@@ -34,6 +46,17 @@ public abstract class AbstractClient implements Client {
 
 	protected static ConcurrentHashMap<Integer, RpcResult> responseCache = new ConcurrentHashMap<Integer, RpcResult>();
 
+	private static final ExecutorService ASYNC_EXECUTOR = Executors.newCachedThreadPool(new ThreadFactory() {
+		private final AtomicInteger counter = new AtomicInteger(0);
+
+		@Override
+		public Thread newThread(Runnable r) {
+			Thread t = new Thread(r, "nfs-rpc-async-" + counter.incrementAndGet());
+			t.setDaemon(true);
+			return t;
+		}
+	});
+
 	@Override
 	public Object invokeSync(Object message, int timeout, int codecType, int protocolType) throws Exception {
 		RequestMessage wrapper = new RequestMessage(message, timeout, codecType, protocolType);
@@ -44,12 +67,34 @@ public abstract class AbstractClient implements Client {
 	public Object invokeSync(Invocation invocation, int timeout, int codecType, int protocolType) throws Exception {
 		byte[][] argTypeBytes = new byte[invocation.getArgTypes().length][];
 		for (int i = 0; i < invocation.getArgTypes().length; i++) {
-			argTypeBytes[i] = invocation.getArgTypes()[i].getBytes();
+			argTypeBytes[i] = invocation.getArgTypes()[i].getBytes(StandardCharsets.UTF_8);
 		}
-		RequestMessage message = new RequestMessage(invocation.getProcessorName().getBytes(),
-				invocation.getMethodName().getBytes(), argTypeBytes, invocation.getArgs(), timeout, codecType,
+		RequestMessage message = new RequestMessage(invocation.getProcessorName().getBytes(StandardCharsets.UTF_8),
+				invocation.getMethodName().getBytes(StandardCharsets.UTF_8), argTypeBytes, invocation.getArgs(), timeout, codecType,
 				protocolType);
 		return invokeSyncIntern(message);
+	}
+
+	@Override
+	public CompletableFuture<Object> invokeAsync(Object message, int timeout, int codecType, int protocolType) {
+		return CompletableFuture.supplyAsync(() -> {
+			try {
+				return invokeSync(message, timeout, codecType, protocolType);
+			} catch (Exception e) {
+				throw new CompletionException(e);
+			}
+		}, ASYNC_EXECUTOR);
+	}
+
+	@Override
+	public CompletableFuture<Object> invokeAsync(Invocation invocation, int timeout, int codecType, int protocolType) {
+		return CompletableFuture.supplyAsync(() -> {
+			try {
+				return invokeSync(invocation, timeout, codecType, protocolType);
+			} catch (Exception e) {
+				throw new CompletionException(e);
+			}
+		}, ASYNC_EXECUTOR);
 	}
 
 	private Object invokeSyncIntern(RequestMessage message) throws Exception {
@@ -68,20 +113,22 @@ public abstract class AbstractClient implements Client {
 				// for performance trace
 				LOGGER.debug("client write message to send buffer,wait for response,request id: " + message.getId());
 			}
+		} catch (RpcRejectException e) {
+			responseCache.remove(message.getId());
+			throw e;
 		} catch (Exception e) {
 			responseCache.remove(message.getId());
-			rpcResult = null;
 			LOGGER.error("send request to os sendbuffer error", e);
-			throw e;
+			throw new RpcSendException("send request to os sendbuffer error", e);
 		}
 		Object result = null;
 		try {
 			result = rpcResult.getResult(message.getTimeout() - (System.currentTimeMillis() - beginTime),
 					TimeUnit.MILLISECONDS);
-		} catch (Exception e) {
+		} catch (InterruptedException e) {
 			responseCache.remove(message.getId());
 			LOGGER.error("Get response error", e);
-			throw new Exception("Get response error", e);
+			throw new RpcDecodeException("Get response error", e);
 		}
 		responseCache.remove(message.getId());
 
@@ -93,9 +140,7 @@ public abstract class AbstractClient implements Client {
 			}
 		}
 		if (result == null) {
-			String errorMsg = "receive response timeout(" + message.getTimeout() + " ms),server is: " + getServerIP()
-					+ ":" + getServerPort() + " request id is:" + message.getId();
-			throw new Exception(errorMsg);
+			throw new RpcTimeoutException(message.getTimeout(), getServerIP() + ":" + getServerPort(), message.getId());
 		}
 
 		if (result instanceof ResponseMessage) {
@@ -111,14 +156,14 @@ public abstract class AbstractClient implements Client {
 				}
 			}
 		} else {
-			throw new Exception("only receive ResponseWrapper or List as response");
+			throw new RpcDecodeException("only receive ResponseMessage or List as response");
 		}
 		try {
 			// do deserialize in business threadpool
 			if (responseWrapper.getResponse() instanceof byte[]) {
 				String responseClassName = null;
 				if (responseWrapper.getResponseClassName() != null) {
-					responseClassName = new String(responseWrapper.getResponseClassName());
+					responseClassName = new String(responseWrapper.getResponseClassName(), StandardCharsets.UTF_8);
 				}
 				// avoid server no return object
 				if (((byte[]) responseWrapper.getResponse()).length == 0) {
@@ -135,7 +180,7 @@ public abstract class AbstractClient implements Client {
 			}
 		} catch (Exception e) {
 			LOGGER.error("Deserialize response object error", e);
-			throw new Exception("Deserialize response object error", e);
+			throw new RpcDecodeException("Deserialize response object error", e);
 		}
 		if (responseWrapper.isError()) {
 			Throwable t = responseWrapper.getException();
@@ -143,7 +188,7 @@ public abstract class AbstractClient implements Client {
 			String errorMsg = "server error,server is: " + getServerIP() + ":" + getServerPort() + " request id is:"
 					+ message.getId();
 			LOGGER.error(errorMsg, t);
-			throw new Exception(errorMsg, t);
+			throw new RpcRemoteException(errorMsg, t, getServerIP() + ":" + getServerPort(), message.getId());
 		}
 		return responseWrapper.getResponse();
 	}

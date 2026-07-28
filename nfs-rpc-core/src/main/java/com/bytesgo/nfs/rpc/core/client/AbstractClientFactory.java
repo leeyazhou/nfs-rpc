@@ -12,6 +12,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.FutureTask;
 
+import com.bytesgo.nfs.rpc.core.exception.RpcRejectException;
+
 /**
  * Abstract Client Factory,create custom nums client
  * 
@@ -96,12 +98,12 @@ public abstract class AbstractClientFactory implements ClientFactory {
     long sendingBytesSize = getSendingBytesSize();
     if (sendingBytesSize >= threshold) {
       if (sendLimitPolicy == SendLimitPolicy.REJECT) {
-        throw new Exception("sending bytes size exceed threshold,size: " + sendingBytesSize + ", threshold: " + threshold);
+        throw new RpcRejectException(sendingBytesSize, threshold);
       } else {
         Thread.sleep(1000);
         sendingBytesSize = getSendingBytesSize();
         if (sendingBytesSize >= threshold) {
-          throw new Exception("sending bytes size exceed threshold,size: " + sendingBytesSize + ", threshold: " + threshold);
+          throw new RpcRejectException(sendingBytesSize, threshold);
         }
       }
     }

@@ -1,9 +1,4 @@
-/**
- * 
- */
-package com.bytesgo.nfs.rpc.core.protocol;
-
-import com.bytesgo.nfs.rpc.core.NFSException;
+package com.bytesgo.nfs.rpc.core.exception;
 
 /**
  * @author leeyazhou
