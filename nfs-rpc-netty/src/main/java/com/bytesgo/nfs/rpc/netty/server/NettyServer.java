@@ -23,6 +23,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
 
@@ -34,7 +35,8 @@ import io.netty.util.concurrent.EventExecutorGroup;
 public class NettyServer implements Server {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(NettyServer.class);
-	private AtomicBoolean startFlag = new AtomicBoolean(false);
+	private static final int DEFAULT_IDLE_TIMEOUT = Integer.getInteger("nfs.rpc.server.idle.timeout", 120);
+	private final AtomicBoolean startFlag = new AtomicBoolean(false);
 
 	private NioEventLoopGroup bossGroup;
 	private NioEventLoopGroup ioGroup;
@@ -50,12 +52,15 @@ public class NettyServer implements Server {
 		if (!startFlag.compareAndSet(false, true)) {
 			return;
 		}
+		serverConfig.validate();
 		bossGroup = new NioEventLoopGroup();
 		ioGroup = new NioEventLoopGroup();
 		businessGroup = new DefaultEventExecutorGroup(serverConfig.getMaxPoolSize());
 
 		ServerBootstrap b = new ServerBootstrap();
 		b.group(bossGroup, ioGroup).channel(NioServerSocketChannel.class)
+				.option(ChannelOption.SO_BACKLOG,
+						Integer.parseInt(System.getProperty("nfs.rpc.server.backlog", "1024")))
 				.childOption(ChannelOption.TCP_NODELAY,
 						Boolean.parseBoolean(System.getProperty("nfs.rpc.tcp.nodelay", "true")))
 				.childOption(ChannelOption.SO_REUSEADDR,
@@ -63,6 +68,7 @@ public class NettyServer implements Server {
 				.childHandler(new ChannelInitializer<SocketChannel>() {
 					@Override
 					public void initChannel(SocketChannel ch) throws Exception {
+						ch.pipeline().addLast("idle", new IdleStateHandler(DEFAULT_IDLE_TIMEOUT, 0, 0));
 						ch.pipeline().addLast("decoder", new NettyProtocolDecoder());
 						ch.pipeline().addLast("encoder", new NettyProtocolEncoder());
 						ch.pipeline().addLast(businessGroup, "handler", new NettyServerHandler());
@@ -70,7 +76,7 @@ public class NettyServer implements Server {
 				});
 		b.bind(new InetSocketAddress(serverConfig.getHost(), serverConfig.getPort())).sync();
 		LOGGER.info("Server started,listen at: " + serverConfig.getPort() + ", businessThreads is "
-				+ serverConfig.getMaxPoolSize());
+				+ serverConfig.getMaxPoolSize() + ", idleTimeout is " + DEFAULT_IDLE_TIMEOUT + "s");
 	}
 
 	public void registerProcessor(int protocolType, String serviceName, Object serviceInstance) {
@@ -78,11 +84,14 @@ public class NettyServer implements Server {
 	}
 
 	public void stop() throws Exception {
-		LOGGER.warn("Server stop!");
-		bossGroup.shutdownGracefully();
-		ioGroup.shutdownGracefully();
-		businessGroup.shutdownGracefully();
-		startFlag.set(false);
+		if (!startFlag.compareAndSet(true, false)) {
+			return;
+		}
+		LOGGER.warn("Server stop begin, draining connections...");
+		bossGroup.shutdownGracefully(0, 5, java.util.concurrent.TimeUnit.SECONDS);
+		ioGroup.shutdownGracefully(0, 5, java.util.concurrent.TimeUnit.SECONDS);
+		businessGroup.shutdownGracefully(0, 5, java.util.concurrent.TimeUnit.SECONDS);
+		LOGGER.warn("Server stopped.");
 	}
 
 }

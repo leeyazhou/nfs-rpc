@@ -16,6 +16,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * Netty4 Client Factory,to create client based on netty API
@@ -26,7 +27,11 @@ public class NettyClientFactory extends AbstractClientFactory {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(NettyClientFactory.class);
 
-  private static AbstractClientFactory _self = new NettyClientFactory();
+  private static final AbstractClientFactory _self = new NettyClientFactory();
+
+  private static final EventLoopGroup group = new NioEventLoopGroup();
+
+  private static final int DEFAULT_IDLE_TIMEOUT = Integer.getInteger("nfs.rpc.client.idle.timeout", 120);
 
   private NettyClientFactory() {
   }
@@ -35,10 +40,17 @@ public class NettyClientFactory extends AbstractClientFactory {
     return _self;
   }
 
+  /**
+   * Shutdown the shared event loop group and release resources.
+   * Call this on application shutdown.
+   */
+  public static void shutdown() {
+    group.shutdownGracefully();
+  }
+
   protected Client createClient(String targetIP, int targetPort, int connectTimeout, String key) throws Exception {
     final NettyClientHandler handler = new NettyClientHandler(this, key);
 
-    EventLoopGroup group = new NioEventLoopGroup(1);
     Bootstrap b = new Bootstrap();
     b.group(group).channel(NioSocketChannel.class)
         .option(ChannelOption.TCP_NODELAY, Boolean.parseBoolean(System.getProperty("nfs.rpc.tcp.nodelay", "true")))
@@ -47,6 +59,7 @@ public class NettyClientFactory extends AbstractClientFactory {
         .handler(new ChannelInitializer<SocketChannel>() {
           @Override
           public void initChannel(SocketChannel ch) throws Exception {
+            ch.pipeline().addLast("idle", new IdleStateHandler(0, 0, DEFAULT_IDLE_TIMEOUT));
             ch.pipeline().addLast("decoder", new NettyProtocolDecoder());
             ch.pipeline().addLast("encoder", new NettyProtocolEncoder());
             ch.pipeline().addLast("handler", handler);

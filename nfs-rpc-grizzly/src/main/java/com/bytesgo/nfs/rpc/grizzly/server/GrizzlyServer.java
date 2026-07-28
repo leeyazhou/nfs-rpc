@@ -7,6 +7,8 @@ package com.bytesgo.nfs.rpc.grizzly.server;
  */
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.glassfish.grizzly.filterchain.FilterChainBuilder;
 import org.glassfish.grizzly.filterchain.TransportFilter;
@@ -31,6 +33,7 @@ import com.bytesgo.nfs.rpc.grizzly.protocol.GrizzlyProtocolFilter;
 public class GrizzlyServer implements Server {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GrizzlyServer.class);
+	private final AtomicBoolean startFlag = new AtomicBoolean(false);
 	private TCPNIOTransport transport = null;
 	private ServerConfig serverConfig;
 
@@ -39,6 +42,10 @@ public class GrizzlyServer implements Server {
 	}
 
 	public void start() throws Exception {
+		if (!startFlag.compareAndSet(false, true)) {
+			return;
+		}
+		serverConfig.validate();
 		ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) serverConfig.getBusinessThreadPool();
 		ThreadPoolConfig config = ThreadPoolConfig.defaultConfig().copy()
 				.setCorePoolSize(threadPoolExecutor.getCorePoolSize())
@@ -59,13 +66,17 @@ public class GrizzlyServer implements Server {
 		transport.bind(serverConfig.getHost(), serverConfig.getPort());
 
 		transport.start();
-		LOGGER.warn("server started,listen at: " + serverConfig.getPort());
+		LOGGER.info("server started,listen at: " + serverConfig.getPort());
 	}
 
 	public void stop() throws Exception {
+		if (!startFlag.compareAndSet(true, false)) {
+			return;
+		}
 		if (transport != null) {
-			transport.stop();
-			LOGGER.warn("server stoped!");
+			LOGGER.warn("Server stop begin, shutting down...");
+			transport.shutdown(5, TimeUnit.SECONDS);
+			LOGGER.warn("Server stopped.");
 		}
 	}
 

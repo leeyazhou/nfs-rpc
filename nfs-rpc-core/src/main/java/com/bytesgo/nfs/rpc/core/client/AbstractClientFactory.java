@@ -5,12 +5,12 @@ package com.bytesgo.nfs.rpc.core.client;
  * 
  * http://code.google.com/p/nfs-rpc (c) 2011
  */
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.bytesgo.nfs.rpc.core.exception.RpcRejectException;
 
@@ -22,9 +22,9 @@ import com.bytesgo.nfs.rpc.core.exception.RpcRejectException;
 public abstract class AbstractClientFactory implements ClientFactory {
 
   // Cache client
-  private static ConcurrentHashMap<String, FutureTask<List<Client>>> clients = new ConcurrentHashMap<String, FutureTask<List<Client>>>();
+  private static final ConcurrentHashMap<String, FutureTask<List<Client>>> clients = new ConcurrentHashMap<>();
 
-  private static boolean isSendLimitEnabled = false;
+  private static volatile boolean isSendLimitEnabled = false;
 
   public Client get(final String targetIP, final int targetPort, final int connectTimeout, String... customKey) throws Exception {
     return get(targetIP, targetPort, connectTimeout, 1, customKey);
@@ -36,49 +36,49 @@ public abstract class AbstractClientFactory implements ClientFactory {
     if (customKey != null && customKey.length == 1) {
       key = customKey[0];
     }
-    if (clients.containsKey(key)) {
+    FutureTask<List<Client>> task = clients.get(key);
+    if (task != null) {
+      List<Client> clientList = task.get();
       if (clientNums == 1) {
-        return clients.get(key).get().get(0);
-      } else {
-        Random random = new Random();
-        return clients.get(key).get().get(random.nextInt(clientNums));
+        return clientList.get(0);
       }
-    } else {
-      final String cacheKey = key;
-      FutureTask<List<Client>> task = new FutureTask<List<Client>>(new Callable<List<Client>>() {
-        public List<Client> call() throws Exception {
-          List<Client> clients = new ArrayList<Client>(clientNums);
-          for (int i = 0; i < clientNums; i++) {
-            clients.add(createClient(targetIP, targetPort, connectTimeout, cacheKey));
-          }
-          return clients;
-        }
-      });
-      FutureTask<List<Client>> currentTask = clients.putIfAbsent(key, task);
-      if (currentTask == null) {
-        task.run();
-      } else {
-        task = currentTask;
-      }
-      if (clientNums == 1)
-        return task.get().get(0);
-      else {
-        Random random = new Random();
-        return task.get().get(random.nextInt(clientNums));
-      }
+      return clientList.get(ThreadLocalRandom.current().nextInt(clientNums));
     }
+    final String cacheKey = key;
+    FutureTask<List<Client>> newTask = new FutureTask<>(new Callable<List<Client>>() {
+      public List<Client> call() throws Exception {
+        List<Client> clientList = new CopyOnWriteArrayList<>();
+        for (int i = 0; i < clientNums; i++) {
+          clientList.add(createClient(targetIP, targetPort, connectTimeout, cacheKey));
+        }
+        return clientList;
+      }
+    });
+    FutureTask<List<Client>> existing = clients.putIfAbsent(key, newTask);
+    if (existing == null) {
+      newTask.run();
+      task = newTask;
+    } else {
+      task = existing;
+    }
+    List<Client> clientList = task.get();
+    if (clientNums == 1) {
+      return clientList.get(0);
+    }
+    return clientList.get(ThreadLocalRandom.current().nextInt(clientNums));
   }
 
   public void removeClient(String key, Client client) {
+    FutureTask<List<Client>> task = clients.get(key);
+    if (task == null) {
+      return;
+    }
     try {
-      // TODO: Fix It
-      clients.remove(key);
-      // clients.get(key).get().remove(client);
-      // clients.get(key)
-      // .get()
-      // .add(createClient(client.getServerIP(),
-      // client.getServerPort(), client.getConnectTimeout(),
-      // key));
+      List<Client> clientList = task.get();
+      clientList.remove(client);
+      if (clientList.isEmpty()) {
+        clients.remove(key);
+      }
     } catch (Exception e) {
       // IGNORE
     }

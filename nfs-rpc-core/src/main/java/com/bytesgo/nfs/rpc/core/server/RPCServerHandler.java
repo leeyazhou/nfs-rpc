@@ -6,8 +6,8 @@ package com.bytesgo.nfs.rpc.core.server;
  * http://code.google.com/p/nfs-rpc (c) 2011
  */
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +26,10 @@ public class RPCServerHandler implements ServerHandler {
   private static final Logger LOGGER = LoggerFactory.getLogger(RPCServerHandler.class);
 
   // Server Processors key: servicename value: service instance
-  private static Map<String, Object> processors = new HashMap<String, Object>();
+  private static final Map<String, Object> processors = new ConcurrentHashMap<>();
 
   // Cached Server Methods key: instanceName#methodname$argtype_argtype
-  private static Map<String, Method> cacheMethods = new HashMap<String, Method>();
+  private static final Map<String, Method> cacheMethods = new ConcurrentHashMap<>();
 
   public void registerProcessor(String instanceName, Object instance) {
     processors.put(instanceName, instance);

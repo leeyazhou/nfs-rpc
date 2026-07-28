@@ -50,6 +50,7 @@ public class MinaServer implements Server {
 			return;
 		}
 		try {
+			serverConfig.validate();
 			serverHandler = new MinaServerHandler(serverConfig.getBusinessThreadPool());
 			acceptor.setHandler(serverHandler);
 			acceptor.bind(new InetSocketAddress(serverConfig.getHost(), serverConfig.getPort()));
@@ -66,9 +67,13 @@ public class MinaServer implements Server {
 	}
 
 	public void stop() throws Exception {
-		serverHandler = null;
-		LOGGER.warn("Server stoped");
+		if (!startFlag.compareAndSet(true, false)) {
+			return;
+		}
+		LOGGER.warn("Server stop begin, unbinding...");
+		acceptor.unbind();
 		acceptor.dispose();
-		startFlag.set(false);
+		serverHandler = null;
+		LOGGER.warn("Server stopped.");
 	}
 }

@@ -20,7 +20,7 @@ public class Codecs {
 
 	public static final int KRYO_CODEC = 4;
 
-	private static Codec[] codecs = new Codec[5];
+	private static volatile Codec[] codecs = new Codec[5];
 
 	static {
 		addCodec(JAVA_CODEC, new JavaCodec());
@@ -32,8 +32,11 @@ public class Codecs {
 		addCodec(KRYO_CODEC, new KryoCodec());
 	}
 
-	public static void addCodec(int encoderKey, Codec codec) {
-		if (encoderKey > codecs.length) {
+	public static synchronized void addCodec(int encoderKey, Codec codec) {
+		if (encoderKey < 0) {
+			throw new IllegalArgumentException("codec key must be >= 0, got " + encoderKey);
+		}
+		if (encoderKey >= codecs.length) {
 			Codec[] newEncoders = new Codec[encoderKey + 1];
 			System.arraycopy(codecs, 0, newEncoders, 0, codecs.length);
 			codecs = newEncoders;
@@ -42,7 +45,11 @@ public class Codecs {
 	}
 
 	public static Codec getCodec(int decoderKey) {
-		return codecs[decoderKey];
+		Codec[] snapshot = codecs;
+		if (decoderKey < 0 || decoderKey >= snapshot.length) {
+			return null;
+		}
+		return snapshot[decoderKey];
 	}
 
 }

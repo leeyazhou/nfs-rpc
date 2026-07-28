@@ -11,20 +11,20 @@ import com.bytesgo.nfs.rpc.core.server.SimpleProcessorServerHandler;
  */
 public class ProtocolFactory {
 
-  // private static final Log LOGGER =
-  // LogFactory.getLog(ProtocolFactory.class);
+  private static volatile Protocol[] protocolHandlers = new Protocol[5];
 
-  private static Protocol[] protocolHandlers = new Protocol[5];
-
-  private static ServerHandler[] serverHandlers = new ServerHandler[5];
+  private static volatile ServerHandler[] serverHandlers = new ServerHandler[5];
 
   static {
     registerProtocol(RPCProtocol.TYPE, new RPCProtocol(), new RPCServerHandler());
     registerProtocol(SimpleProcessorProtocol.TYPE, new SimpleProcessorProtocol(), new SimpleProcessorServerHandler());
   }
 
-  public static void registerProtocol(int type, Protocol customProtocol, ServerHandler customServerHandler) {
-    if (type > protocolHandlers.length) {
+  public static synchronized void registerProtocol(int type, Protocol customProtocol, ServerHandler customServerHandler) {
+    if (type < 0) {
+      throw new IllegalArgumentException("protocol type must be >= 0, got " + type);
+    }
+    if (type >= protocolHandlers.length) {
       Protocol[] newProtocolHandlers = new Protocol[type + 1];
       System.arraycopy(protocolHandlers, 0, newProtocolHandlers, 0, protocolHandlers.length);
       protocolHandlers = newProtocolHandlers;
@@ -37,11 +37,19 @@ public class ProtocolFactory {
   }
 
   public static Protocol getProtocol(int type) {
-    return protocolHandlers[type];
+    Protocol[] handlers = protocolHandlers;
+    if (type < 0 || type >= handlers.length) {
+      return null;
+    }
+    return handlers[type];
   }
 
   public static ServerHandler getServerHandler(int type) {
-    return serverHandlers[type];
+    ServerHandler[] handlers = serverHandlers;
+    if (type < 0 || type >= handlers.length) {
+      return null;
+    }
+    return handlers[type];
   }
 
 }

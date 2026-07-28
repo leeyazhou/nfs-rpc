@@ -11,8 +11,10 @@ import com.bytesgo.nfs.rpc.core.client.ClientFactory;
 import com.bytesgo.nfs.rpc.core.message.RequestMessage;
 import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.WriteBufferWaterMark;
 
 /**
  * Netty4 Client
@@ -84,8 +86,17 @@ public class NettyClient extends AbstractClient {
   }
 
   public long getSendingBytesSize() {
-    // TODO: implement it
-    return 0;
+    Channel channel = cf.channel();
+    if (channel == null || !channel.isActive()) {
+      return 0;
+    }
+    WriteBufferWaterMark waterMark = channel.config().getWriteBufferWaterMark();
+    if (waterMark == null) {
+      return 0;
+    }
+    long highWaterMark = waterMark.high();
+    long beforeUnwritable = channel.bytesBeforeUnwritable();
+    return Math.max(0, highWaterMark - beforeUnwritable);
   }
 
   public ClientFactory getClientFactory() {

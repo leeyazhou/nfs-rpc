@@ -14,6 +14,8 @@ import com.bytesgo.nfs.rpc.core.message.ResponseMessage;
  */
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
 
 /**
  * Netty4 Client Handler
@@ -44,9 +46,21 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<ResponseMess
   @Override
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
     if (!(cause instanceof IOException)) {
-      // only log
       LOGGER.error("catch some exception not IOException", cause);
     }
+  }
+
+  @Override
+  public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+    if (evt instanceof IdleStateEvent) {
+      IdleStateEvent e = (IdleStateEvent) evt;
+      if (e.state() == IdleState.ALL_IDLE) {
+        LOGGER.warn("close idle client connection: " + ctx.channel().remoteAddress());
+        ctx.close();
+        return;
+      }
+    }
+    super.userEventTriggered(ctx, evt);
   }
 
   @Override
